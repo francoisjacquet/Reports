@@ -1,6 +1,6 @@
 Reports Module
 
-http://github.com/francoisjacquet/rosariosis-module-state-reports
+http://github.com/francoisjacquet/rosariosis-module-reports
 
 Version 1.0 - December, 2015
 
@@ -30,4 +30,4 @@ Copy the Reports/ folder and its content inside the modules/ folder of RosarioSI
 
 Go to School Setup > School Configuration > Modules and click "Activate".
 
-Requires RosarioSIS 2.8+
+Requires RosarioSIS 2.8.25+
