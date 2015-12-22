@@ -157,7 +157,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 			_( 'Absent' ),
 			_( 'Enrolled' ),
 			'~',
-			sprintf( _( '%s ID' ), Config( 'NAME' ) ),
+			dgettext( 'Reports', 'Student ID' ),
 		),
 	);
 
@@ -345,7 +345,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 	$breakdown_options = array(
 		'school' => _( 'School' ),
 		'grade' => _( 'Grade' ),
-		'stuid' => sprintf( _( '%s ID' ), Config( 'NAME' ) ),
+		'stuid' => dgettext( 'Reports', 'Student ID' ),
 	);
 
 	foreach ( (array) $fields_RET as $field )
@@ -480,7 +480,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 	$search_fields_RET[] = array(
 		'COLUMN_NAME' => 'stuid',
 		'TYPE' => 'other',
-		'TITLE' => sprintf( _( '%s ID' ), Config( 'NAME' ) ),
+		'TITLE' => dgettext( 'Reports', 'Student ID' ),
 	);
 
 	$search_fields_RET[] = array(

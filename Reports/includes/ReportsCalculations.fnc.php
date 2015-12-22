@@ -11,14 +11,25 @@
  *
  * @example $query = _makeQuery( $_GET['query'] );
  *
- * @param  string $query Requested QUERY string
+ * @param  string $query Requested QUERY string.
  *
  * @return string Formatted Query
  */
 function _makeQuery( $query )
 {
+
+	// REPLACE FIELDS / TIME VALUES TRANSLATIONS.
+	$query = str_ireplace( _( 'Present' ), 'present', $query );
+
+	$query = str_ireplace( _( 'Absent' ), 'absent', $query );
+
+	$query = str_ireplace( _( 'Enrolled' ), 'enrolled', $query );
+
+	$query = str_ireplace( dgettext( 'Reports', 'Student ID' ), 'student id', $query );
+
 	$query = mb_strtolower( $query );
 
+	// REMOVE HTML TAGS.
 	$query = preg_replace( '/<span id="?/', '<', $query );
 
 	$query = str_replace( '</span>', '', $query );
@@ -116,7 +127,7 @@ function _getAJAXResults( $query, $modfunc )
 		}
 		elseif ( $_REQUEST['breakdown'] == 'grade' )
 		{
-			$var = 'grades';
+			$var = 'grade';
 
 			$schools = mb_substr( str_replace( ",", "','", User( 'SCHOOLS' ) ), 2, -2 );
 
@@ -130,7 +141,7 @@ function _getAJAXResults( $query, $modfunc )
 				$extra_schools = "WHERE SCHOOL_ID IN (" . $schools . ") ";
 			}
 
-			$group_RET = DBGet( DBQuery( "SELECT ID AS ID,TITLE,SHORT_NAME
+			$group_RET = DBGet( DBQuery( "SELECT ID,TITLE,SHORT_NAME
 				FROM SCHOOL_GRADELEVELS " . $extra_schools . "
 				ORDER BY SORT_ORDER" ), array(), array( 'SHORT_NAME' ) );
 
@@ -330,7 +341,7 @@ function _getAJAXResults( $query, $modfunc )
 			{
 				$cat_column = sprintf( _( '%s ID' ), Config( 'NAME' ) );
 			}
-			// Custom field
+			// Custom field.
 			else
 			{
 				$field_id = mb_substr( $_REQUEST['breakdown'], 7 );
@@ -657,7 +668,7 @@ function _getResults( $type, $number, $index = '' )
 	}
 	else
 		$start_date = $min_max_date[1]['MIN_DATE'];
-	
+
 	if ( isset( $_REQUEST['day_end'] )
 		&& isset( $_REQUEST['month_end'] )
 		&& isset( $_REQUEST['year_end'] ) )
@@ -675,7 +686,7 @@ function _getResults( $type, $number, $index = '' )
 	{
 		$extra .= " AND ssm.SCHOOL_ID = '" . $_REQUEST['school'] . "' ";
 	}
-	
+
 	$extra .= CustomFields( 'where' );
 
 	$schools = mb_substr( str_replace( ",", "','", User( 'SCHOOLS' ) ), 2, -2 );
@@ -733,14 +744,14 @@ function _getResults( $type, $number, $index = '' )
 			}
 
 		break;
-		
+
 		case 'absent':
 
 			if ( ! mb_strpos( $extra, 'GROUP' ) )
 			{
 				$extra .= " GROUP BY ad.SCHOOL_DATE";
 			}
-	
+
 			$absent_RET = DBGet( DBQuery( "SELECT ad.SCHOOL_DATE,COALESCE(sum(ad.STATE_VALUE-1)*-1,0) AS STATE_VALUE
 				FROM ATTENDANCE_DAY ad,STUDENT_ENROLLMENT ssm,STUDENTS s
 				WHERE s.STUDENT_ID=ssm.STUDENT_ID
@@ -818,7 +829,7 @@ function _getResults( $type, $number, $index = '' )
 
 		/*case 'orchard_test':
 			$schools = substr(str_replace(",","','",User('SCHOOLS')),2,-2);
-	
+
 			if($_REQUEST['school'])
 				$extra_schools = '';
 			elseif($_REQUEST['_search_all_schools']!='Y')
@@ -836,7 +847,7 @@ function _getResults( $type, $number, $index = '' )
 					$student_ids .= $student['STUDENT_ID'].',';
 				}
 				$student_ids = substr($student_ids,0,-1);
-	
+
 				$students_RET = DBGet(DBQuery("SELECT id,SCHOOL_ID FROM orchardstudent where externalid IN (".$student_ids.")",'mysql'),array(),array('SCHOOL_ID'));
 				$remote_type = false;
 			}
@@ -868,7 +879,7 @@ function _getResults( $type, $number, $index = '' )
 					$student_test_count = array();
 
 					foreach($RET as $i=>$value)
-					{					
+					{
 						if(isset($_REQUEST['test_no']))
 							$student_test_count[$value['STUDENTID']]++;
 						if(isset($_REQUEST['test_no']) && in_array('0',$_REQUEST['test_no']) && $value['STUDENTID']!=$RET[($i+1)]['STUDENTID'])
@@ -876,7 +887,7 @@ function _getResults( $type, $number, $index = '' )
 							if($index!='')
 								$array[$value[$index]][] = ($value['CORRECT']*100)/$value['TOTAL'];
 							else
-								$array[] = ($value['CORRECT']*100)/$value['TOTAL'];							
+								$array[] = ($value['CORRECT']*100)/$value['TOTAL'];
 						}
 						elseif(!isset($_REQUEST['test_no']) || in_array($student_test_count[$value['STUDENTID']],$_REQUEST['test_no']))
 						{
@@ -894,7 +905,7 @@ function _getResults( $type, $number, $index = '' )
 
 		/*case 'time on task':
 			$schools = substr(str_replace(",","','",User('SCHOOLS')),2,-2);
-	
+
 			if($_REQUEST['school'])
 				$extra_schools = '';
 			elseif($_REQUEST['_search_all_schools']!='Y')
@@ -912,7 +923,7 @@ function _getResults( $type, $number, $index = '' )
 					$student_ids .= $student['STUDENT_ID'].',';
 				}
 				$student_ids = substr($student_ids,0,-1);
-	
+
 				$students_RET = DBGet(DBQuery("SELECT id,SCHOOL_ID FROM orchardstudent where externalid IN (".$student_ids.")",'mysql'),array(),array('SCHOOL_ID'));
 				$remote_type = false;
 			}
@@ -932,7 +943,7 @@ function _getResults( $type, $number, $index = '' )
 				{
 					$RET = DBGet(DBQuery("SELECT studentid,sum(tot) as tot from orchardtimeontask where studentid IN ($student_ids_list) and SCHOOL_ID='$school_id' group by studentid",'mysql'));
 					$remote_type = false;
-	
+
 					foreach($RET as $value)
 						$array[] = $value['TOT'];
 				}

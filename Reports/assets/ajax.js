@@ -38,9 +38,9 @@ function SendXMLRequest(formname,extra)
 	{
 		elem = document.forms[formname].elements[elemindex];
 		if(elem.value)
-			url = url + "&" + elem.name + "=" + urlencode(elem.value);
+			url = url + "&" + elem.name + "=" + encodeURIComponent(elem.value);
 		else if(elem.options)
-			url = url + "&" + elem.name + "=" + urlencode(elem.options[elem.selectedIndex].value);
+			url = url + "&" + elem.name + "=" + encodeURIComponent(elem.options[elem.selectedIndex].value);
 	}
 
 	//document.location.href = url;
@@ -55,7 +55,6 @@ function processRequest()
 	{
 		XMLResponse = connection.responseXML;
 		document.getElementById("XMLHttpRequestResult").style.visibility = "visible";
-		console.log(XMLResponse);
 		results_list = XMLResponse.getElementsByTagName("results");
 		results_list = results_list[0];
 		results = results_list.getElementsByTagName("result");
@@ -91,11 +90,11 @@ function getRequestVar(variable)
 	return false;
 }
 
-function urlencode(variable)
+/*function urlencode(variable)
 {
 	return escape(variable)
 		.replace("+",'%2B')
 		.replace("\"",'%22')
 		.replace("\'", '%27')
 		.replace("\/",'%2F');
-}
+}*/
