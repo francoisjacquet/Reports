@@ -9,7 +9,7 @@
 /**
  * Make Query from requested QUERY string
  *
- * @example $query = _makeQuery( $_GET['query'] );
+ * @example $query = _makeQuery( $_POST['query'] );
  *
  * @param  string $query Requested QUERY string.
  *

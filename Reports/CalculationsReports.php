@@ -396,7 +396,7 @@ function _runCalc( $calculation_id, $breakdown, $graph )
 
 	require_once 'modules/Reports/includes/ReportsCalculations.fnc.php';
 
-	$query = _makeQuery( isset( $_GET['query'] ) ? $_GET['query'] : $_REQUEST['query'] );
+	$query = _makeQuery( isset( $_POST['query'] ) ? $_POST['query'] : $_REQUEST['query'] );
 
 	$return = _getAJAXResults( $query, 'echoXMLHttpRequest' );
 

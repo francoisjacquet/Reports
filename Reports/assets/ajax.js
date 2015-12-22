@@ -32,20 +32,22 @@ function SendXMLRequest(formname,extra)
 		alert('AJAX connection could not be made.');
 
 	connection.onreadystatechange = processRequest;
-	url = "Modules.php?modname=" + getRequestVar('modname') + "&_ROSARIO_PDF=true&modfunc=" + extra;
-	elems = document.forms[formname].elements;
-	for(elemindex = 0;elemindex<elems.length;elemindex++)
+	var url = "Modules.php?modname=" + getRequestVar('modname') + "&_ROSARIO_PDF=true&modfunc=" + extra;
+	var elems = document.forms[formname].elements;
+	var postvars = '';
+	for(var elemindex = 0;elemindex<elems.length;elemindex++)
 	{
 		elem = document.forms[formname].elements[elemindex];
 		if(elem.value)
-			url = url + "&" + elem.name + "=" + encodeURIComponent(elem.value);
+			postvars += "&" + elem.name + "=" + encodeURIComponent(elem.value);
 		else if(elem.options)
-			url = url + "&" + elem.name + "=" + encodeURIComponent(elem.options[elem.selectedIndex].value);
+			postvars += "&" + elem.name + "=" + encodeURIComponent(elem.options[elem.selectedIndex].value);
 	}
 
 	//document.location.href = url;
-	connection.open("GET",url,true);
-	connection.send(null);
+	connection.open("POST",url,true);
+	connection.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	connection.send(postvars.substr(1));
 }
 
 function processRequest()

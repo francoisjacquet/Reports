@@ -14,7 +14,7 @@ if ( $_REQUEST['modname'] !== 'misc/Export.php'
 // AJAX.
 if ( $_REQUEST['modfunc'] === 'XMLHttpRequest' )
 {
-	$query = _makeQuery( $_GET['query'] );
+	$query = _makeQuery( $_POST['query'] );
 
 	//print_r($_REQUEST);
 	/*echo '<br />EVAL QUERY: '.
@@ -39,7 +39,7 @@ if ( $_REQUEST['modfunc'] === 'XMLHttpRequest' )
 // Save AJAX.
 elseif ( $_REQUEST['modfunc'] === 'saveXMLHttpRequest' )
 {
-	$_REQUEST['query'] = $_GET['query'];
+	$_REQUEST['query'] = $_POST['query'];
 
 	$location = PreparePHP_SELF();
 
@@ -66,7 +66,7 @@ elseif ( $_REQUEST['modfunc'] === 'saveXMLHttpRequest' )
 // Echo AJAX.
 elseif ( $_REQUEST['modfunc'] === 'echoXMLHttpRequest' )
 {
-	$query = _makeQuery( $_GET['query'] );
+	$query = _makeQuery( $_POST['query'] );
 
 	//print_r($_REQUEST);
 	/*echo '<br />EVAL QUERY: '.
