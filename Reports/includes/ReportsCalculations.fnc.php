@@ -465,6 +465,7 @@ function _makeSearchInput( $field )
 			return SelectInput(
 				$value,
 				'cust[' . $field['COLUMN_NAME'] . ']',
+				'',
 				array( '!' => _( 'No Value' ) ) + $options,
 				'N/A',
 				'style="max-width:250px;"',
