@@ -77,7 +77,9 @@ function _makeQuery( $query )
 
 	$query = preg_replace( '/<end[0-9]+> */', '', $query );
 
-	if ( empty( trim( $query ) ) )
+	$query = trim( $query );
+
+	if ( empty( $query ) )
 	{
 		$query = 'false';
 	}
