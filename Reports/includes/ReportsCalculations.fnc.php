@@ -112,7 +112,8 @@ function _makeQuery( $query )
 function _getAJAXResults( $query, $modfunc )
 {
 	global $_ROSARIO,
-		$_runCalc_start_REQUEST;
+		$_runCalc_start_REQUEST,
+		$num;
 
 	$results = '';
 
@@ -133,8 +134,8 @@ function _getAJAXResults( $query, $modfunc )
 
 			$schools = mb_substr( str_replace( ",", "','", User( 'SCHOOLS' ) ), 2, -2 );
 
-			if ( isset( $_REQUEST['_search_all_schools'] )
-				&& $_REQUEST['_search_all_schools'] != 'Y' )
+			if ( ! isset( $_REQUEST['_search_all_schools'] )
+				|| $_REQUEST['_search_all_schools'] != 'Y' )
 			{
 				$extra_schools = "WHERE SCHOOL_ID='" . UserSchool() . "' ";
 			}
@@ -203,6 +204,39 @@ function _getAJAXResults( $query, $modfunc )
 				$extra .
 				' ORDER BY LAST_NAME,FIRST_NAME' ) );
 		}
+		elseif ( $_REQUEST['breakdown'] == 'age' )
+		{
+			$var = 'age';
+
+			$schools = mb_substr( str_replace( ",", "','", User( 'SCHOOLS' ) ), 2, -2 );
+
+			if ( ! isset( $_REQUEST['_search_all_schools'] )
+				|| $_REQUEST['_search_all_schools'] != 'Y' )
+			{
+				$extra_schools = "SCHOOL_ID='" . UserSchool() . "' AND ";
+			}
+			elseif ( $schools )
+			{
+				$extra_schools = "SCHOOL_ID IN (" . $schools . ") AND ";
+			}
+
+			// http://www.sqlines.com/postgresql/how-to/datediff
+			// SELECT (DATE_PART('day', CURRENT_DATE::timestamp - '2011-10-02'::timestamp) / 365.25)::int;
+			$group_RET = DBGet( DBQuery( "SELECT DISTINCT( (DATE_PART('day', CURRENT_TIMESTAMP - s.CUSTOM_200000004::timestamp) / 365.25)::int ) AS AGE
+				FROM STUDENTS s,STUDENT_ENROLLMENT ssm	
+				WHERE s.STUDENT_ID=ssm.STUDENT_ID
+				AND " . str_replace( 'SCHOOL_ID', 'ssm.SCHOOL_ID', $extra_schools ) . " ssm.SYEAR='" . UserSyear() . "'
+				ORDER BY AGE" ) );
+
+			foreach ( (array) $group_RET as $age )
+			{
+				$i++;
+
+				$group[ $i ]['ID'] = $age['AGE'];
+
+				$group[ $i ]['TITLE'] = sprintf( dgettext( 'Reports', '%s years' ), $age['AGE'] );
+			}
+		}
 		elseif ( mb_substr( $_REQUEST['breakdown'], 0, 6 ) === 'CUSTOM' )
 		{
 			/*if ( $_REQUEST['breakdown'] === 'CUSTOM_44' ) // RosarioSIS?
@@ -222,14 +256,15 @@ function _getAJAXResults( $query, $modfunc )
 
 			$options = explode( '<br />', nl2br( $select_options_RET[1]['SELECT_OPTIONS'] ) );
 
-			$group[0] = array();
+			// Add No Value.
+			$group[0] = array( 'ID' => '!', 'TITLE' => _( 'No Value' ) );
 
 			foreach ( (array) $options as $option )
 			{
-				$group[] = array( 'ID' => $option, 'TITLE' => $option );
-			}
+				$i++;
 
-			unset( $group[0] );
+				$group[ $i ] = array( 'ID' => $option, 'TITLE' => $option );
+			}
 		}
 		// End common part.
 	}
@@ -238,7 +273,7 @@ function _getAJAXResults( $query, $modfunc )
 	{
 		if ( isset( $_REQUEST['breakdown'] ) )
 		{
-			$start_num = $num;
+			$start_num = 1;
 
 			foreach ( (array) $group as $value )
 			{
@@ -254,19 +289,30 @@ function _getAJAXResults( $query, $modfunc )
 							$_REQUEST['screen'][ $i ][ $var ] = $value['ID'];
 					}
 				}
-	/*			foreach($_REQUEST['screen'] as $key_num=>$values)
+
+				/*foreach($_REQUEST['screen'] as $key_num=>$values)
 				{
 					if(substr($var,0,6)=='CUSTOM')
 						$_REQUEST['screen'][$key_num]['cust'][$var] = $value['ID'];
 					else
 						$_REQUEST['screen'][$key_num][$var] = $value['ID'];
-				}
-	*/
+				}*/
+
 				$num = $start_num;
+
+				// Build breakdown fake $_REQUEST var for appendSQL().
+				if ( mb_substr( $var, 0, 6 ) === 'CUSTOM' )
+				{
+					$_REQUEST['cust'][ $var ] = $value['ID'];
+				}
+				else
+				{
+					$_REQUEST[ $var ] = $value['ID'];
+				}
 
 				$val = eval( $query );
 
-				// Float
+				// Float.
 				if ( mb_strpos( $val, '.' ) !== false )
 				{
 					$val = ltrim( round( $val, 3 ), '0' );
@@ -293,7 +339,7 @@ function _getAJAXResults( $query, $modfunc )
 		{
 			$RET = array();
 
-			$start_num = $num;
+			$start_num = 1;
 
 			foreach ( (array) $group as $value )
 			{
@@ -313,6 +359,16 @@ function _getAJAXResults( $query, $modfunc )
 				}
 
 				$num = $start_num;
+
+				// Build breakdown fake $_REQUEST var for appendSQL().
+				if ( mb_substr( $var, 0, 6 ) === 'CUSTOM' )
+				{
+					$_REQUEST['cust'][ $var ] = $value['ID'];
+				}
+				else
+				{
+					$_REQUEST[ $var ] = $value['ID'];
+				}
 
 				$val = eval( $query );
 
@@ -692,14 +748,20 @@ function _getResults( $type, $number, $index = '' )
 
 	$extra .= CustomFields( 'where' );
 
+	if ( isset( $_REQUEST['age'] ) )
+	{
+		// We could have used AGE() function since PostgreSQL 8.4.
+		$extra .= " AND (DATE_PART('day', CURRENT_TIMESTAMP - s.CUSTOM_200000004::timestamp) / 365.25)::int = " . $_REQUEST['age'] . ' ';
+	}
+
 	$schools = mb_substr( str_replace( ",", "','", User( 'SCHOOLS' ) ), 2, -2 );
 
 	if ( isset( $_REQUEST['school'] ) )
 	{
 		$extra_schools = '';
 	}
-	elseif ( isset( $_REQUEST['_search_all_schools'] )
-		&& $_REQUEST['_search_all_schools'] != 'Y' )
+	elseif ( ! isset( $_REQUEST['_search_all_schools'] )
+		|| $_REQUEST['_search_all_schools'] != 'Y' )
 	{
 		$extra_schools = "SCHOOL_ID='" . UserSchool() . "' AND ";
 	}
