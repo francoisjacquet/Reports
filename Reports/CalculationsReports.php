@@ -235,6 +235,11 @@ function replaceAll( haystack, needle, replacement )
 		'required style="width:' . ( $width - 7 ) . ';"'
 	);
 
+	$birthdate_RET = DBGet( DBQuery( "SELECT 1
+		FROM CUSTOM_FIELDS
+		WHERE TYPE='date'
+		AND ID='200000004'" ) );
+
 	$fields_RET = DBGet( DBQuery( "SELECT ID,TITLE
 		FROM CUSTOM_FIELDS
 		WHERE TYPE='select'
@@ -245,6 +250,12 @@ function replaceAll( haystack, needle, replacement )
 		'grade' => _( 'Grade' ),
 		'stuid' => sprintf( _( '%s ID' ), Config( 'NAME' ) ),
 	);
+
+	// Check Birthdate original field exists and is DATE.
+	if ( $birthdate_RET )
+	{
+		$breakdown_options['age'] = _( 'Age' );
+	}
 
 	foreach ( (array) $fields_RET as $field )
 	{
