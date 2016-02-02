@@ -349,7 +349,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 
 	$breakdown_options = array(
 		'school' => _( 'School' ),
-		'grade' => _( 'Grade' ),
+		'grade' => _( 'Grade Level' ),
 		'stuid' => dgettext( 'Reports', 'Student ID' ),
 	);
 
@@ -391,7 +391,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 		</div>
 	</td></tr></table>
 	<div id="XMLHttpRequestResult"></div>';
-	
+
 	echo PopTable( 'footer' );
 
 	echo '<div style="text-align: center;">';
@@ -402,7 +402,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 	</div>';
 
 	echo '<div id="hidden_search_contents"><form action="#" name="_searchform_">';
-	
+
 	for ( $i = 1; $i <= 10; $i++ )
 	{
 		echo '<div div_id="search_contents' . $i . '"></div>';
@@ -507,14 +507,14 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 		$fields_select .= '<option value="' . $field['COLUMN_NAME'] . '">' . $field['TITLE'] . '</option>';
 	}
 
-	$fields_select .= '<option value="grade" selected>'. _( 'Grade' ) . '</option>';
+	$fields_select .= '<option value="grade" selected>'. _( 'Grade Level' ) . '</option>';
 
 	$fields_select .= '</select>';
 
 	$search_fields_RET[] = array(
 		'COLUMN_NAME' => 'grade',
 		'TYPE' => 'grade',
-		'TITLE' => _( 'Grade' ),
+		'TITLE' => _( 'Grade Level' ),
 	);
 
 	echo '<div id="hidden_search_inputtimespan" style="visibility:hidden;">

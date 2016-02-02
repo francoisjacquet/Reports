@@ -247,7 +247,7 @@ function replaceAll( haystack, needle, replacement )
 
 	$breakdown_options = array(
 		'school' => _( 'School' ),
-		'grade' => _( 'Grade' ),
+		'grade' => _( 'Grade Level' ),
 		'stuid' => sprintf( _( '%s ID' ), Config( 'NAME' ) ),
 	);
 
