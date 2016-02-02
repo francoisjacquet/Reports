@@ -254,7 +254,7 @@ function _getAJAXResults( $query, $modfunc )
 			$select_options_RET = DBGet( DBQuery( "SELECT SELECT_OPTIONS
 				FROM CUSTOM_FIELDS WHERE ID='" . $field_id . "'" ) );
 
-			$options = explode( '<br />', str_replace( array( "\r\n", "\n", "\r" ), '<br />', $select_options_RET[1]['SELECT_OPTIONS'] ) );
+			$options = explode( "\r", str_replace( array( "\r\n", "\n" ), "\r", $select_options_RET[1]['SELECT_OPTIONS'] ) );
 
 			// Add No Value.
 			$group[0] = array( 'ID' => '!', 'TITLE' => _( 'No Value' ) );
@@ -503,7 +503,7 @@ function _makeSearchInput( $field )
 
 		case 'select':
 
-			$options = explode( '<br />', str_replace( array( "\r\n", "\n", "\r" ), '<br />', $field['SELECT_OPTIONS'] ) );
+			$options = explode( "\r", str_replace( array( "\r\n", "\n" ), "\r", $field['SELECT_OPTIONS'] ) );
 
 			/*if($_REQUEST['bottom_back']=='true' && $_SESSION['_REQUEST_vars']['cust'][$field['COLUMN_NAME']])
 				$bb_option = $_SESSION['_REQUEST_vars']['cust'][$field['COLUMN_NAME']];
@@ -686,8 +686,6 @@ function _getResults( $type, $number, $index = '' )
 		$remote_type;
 
 	$type = trim( $type );
-
-	$num++;
 
 	$start_REQUEST = $_REQUEST;
 
@@ -1022,6 +1020,8 @@ function _getResults( $type, $number, $index = '' )
 	$_REQUEST = $start_REQUEST;
 
 	//var_dump($array);
+
+	$num++;
 
 	return $array;
 }
