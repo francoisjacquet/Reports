@@ -254,7 +254,7 @@ function _getAJAXResults( $query, $modfunc )
 			$select_options_RET = DBGet( DBQuery( "SELECT SELECT_OPTIONS
 				FROM CUSTOM_FIELDS WHERE ID='" . $field_id . "'" ) );
 
-			$options = explode( '<br />', nl2br( $select_options_RET[1]['SELECT_OPTIONS'] ) );
+			$options = explode( '<br />', str_replace( array( "\r\n", "\n", "\r" ), '<br />', $select_options_RET[1]['SELECT_OPTIONS'] ) );
 
 			// Add No Value.
 			$group[0] = array( 'ID' => '!', 'TITLE' => _( 'No Value' ) );
@@ -503,7 +503,7 @@ function _makeSearchInput( $field )
 
 		case 'select':
 
-			$options = explode( '<br />', nl2br( $field['SELECT_OPTIONS'] ) );
+			$options = explode( '<br />', str_replace( array( "\r\n", "\n", "\r" ), '<br />', $field['SELECT_OPTIONS'] ) );
 
 			/*if($_REQUEST['bottom_back']=='true' && $_SESSION['_REQUEST_vars']['cust'][$field['COLUMN_NAME']])
 				$bb_option = $_SESSION['_REQUEST_vars']['cust'][$field['COLUMN_NAME']];
