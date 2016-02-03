@@ -234,7 +234,14 @@ function _getAJAXResults( $query, $modfunc )
 
 				$group[ $i ]['ID'] = $age['AGE'];
 
-				$group[ $i ]['TITLE'] = sprintf( dgettext( 'Reports', '%s years' ), $age['AGE'] );
+				if ( ! $age['AGE'] )
+				{
+					$group[ $i ]['TITLE'] = _( 'No Value' );
+				}
+				else
+				{
+					$group[ $i ]['TITLE'] = sprintf( dgettext( 'Reports', '%s years' ), $age['AGE'] );
+				}
 			}
 		}
 		elseif ( mb_substr( $_REQUEST['breakdown'], 0, 6 ) === 'CUSTOM' )
