@@ -39,9 +39,9 @@ function SendXMLRequest(formname,extra)
 	{
 		elem = document.forms[formname].elements[elemindex];
 		if(elem.value)
-			postvars += "&" + elem.name + "=" + encodeURIComponent(elem.value);
+			postvars += "&" + elem.name + "=" + encodeURIComponent( elem.value );
 		else if(elem.options)
-			postvars += "&" + elem.name + "=" + encodeURIComponent(elem.options[elem.selectedIndex].value);
+			postvars += "&" + elem.name + "=" + encodeURIComponent( elem.options[elem.selectedIndex].value );
 	}
 
 	//document.location.href = url;
@@ -58,11 +58,12 @@ function processRequest()
 		XMLResponse = connection.responseXML;
 		document.getElementById("XMLHttpRequestResult").style.visibility = "visible";
 		results_list = XMLResponse.getElementsByTagName("results");
+		/*console.log(XMLResponse,results_list);*/
 		results_list = results_list[0];
 		results = results_list.getElementsByTagName("result");
 
-		document.getElementById("XMLHttpRequestResult").innerHTML = '';
 		table = '<table>';
+
 		for(i=0;i<results.length;i++)
 		{
 			table = table + '<tr>';
@@ -74,8 +75,10 @@ function processRequest()
 				title = '<img src="modules/Reports/assets/check.gif" /> Saved';
 			table = table + '<td>' + title + '</td></tr>';
 		}
+
 		table = table + '</table>';
-		document.getElementById("XMLHttpRequestResult").innerHTML = document.getElementById("XMLHttpRequestResult").innerHTML + table;
+
+		document.getElementById("XMLHttpRequestResult").innerHTML = table;
 	}
 }
 
