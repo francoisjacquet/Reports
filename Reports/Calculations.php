@@ -372,7 +372,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 		dgettext( 'Reports', 'Breakdown' )
 	);
 
-	echo PopTable( 'header', dgettext( 'Reports', 'Equation' ) );
+	echo PopTable( 'header', dgettext( 'Reports', 'Equation' ), 'style="margin:0 0;"' );
 		
 	echo '<table width=100%><tr><td class="align-right">' .
 		$breakdown .
@@ -394,11 +394,9 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 
 	echo PopTable( 'footer' );
 
-	echo '<div style="text-align: center;">';
-
-	echo '<div id="search_screen" style="visibility:hidden; display: inline-block; text-align: left;">
+	echo '<div id="search_screen" style="visibility:hidden; display: inline-block;">
 		<img src="modules/Reports/assets/arrow_up.gif" />
-		<div style="border: solid 2px #CCBBCC; background-color: #fff;" id="search_contents"></div>
+		<div style="border: solid 2px #CCBBCC;" id="search_contents"></div>
 	</div>';
 
 	echo '<div id="hidden_search_contents"><form action="#" name="_searchform_">';
@@ -416,9 +414,9 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 
 	echo '<div style="visibility:hidden;" id="hidden_permanent_search_contents"></div>';
 
-	echo '<div id="save_screen" style="display:none; text-align: left;">
+	echo '<div id="save_screen" style="display:none;">
 		<img src="modules/Reports/assets/arrow_up.gif" />
-		<div style="border: solid 2px #CCBBCC; background-color: #fff;" id="save_content">';
+		<div style="border: solid 2px #CCBBCC;" id="save_content">';
 
 	echo '<table class="cellpadding-5"><tr>
 		<td>' . TextInput(
@@ -434,7 +432,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 			'onclick="saveQuery(); return false;"'
 		) . '</td></tr></table>';
 
-	echo '</div></div></form></div>';
+	echo '</div></div></form>';
 
 	$equations_RET = DBGet( DBQuery( "SELECT ID,TITLE,URL
 		FROM SAVED_CALCULATIONS
@@ -457,8 +455,6 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 		echo '</form>';
 
 		echo '<br />';
-
-		//echo DrawBlock(_('Saved Equations'),$table); // RosarioSIS? use PopTable?
 	}
 
 	// Preferences Student Fields Search.

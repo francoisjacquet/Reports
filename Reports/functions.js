@@ -71,16 +71,19 @@ function insertItem( title, type )
 							if (elem.name!='itemname')
 							{
 								if (elem.value)
-									document.getElementById('hidden_permanent_search_contents').innerHTML = document.getElementById('hidden_permanent_search_contents').innerHTML + '<input type="hidden" name="screen['+SearchScreenCount+']['+elem.getAttribute('name')+']" value="'+elem.value+'" />';
+									document.getElementById('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+SearchScreenCount+']['+elem.getAttribute('name')+']" value="'+elem.value+'" />';
 								else if (elem.options)
-									document.getElementById('hidden_permanent_search_contents').innerHTML = document.getElementById('hidden_permanent_search_contents').innerHTML + '<input type="hidden" name="screen['+SearchScreenCount+']['+elem.getAttribute('name')+']" value="'+elem.options[elem.selectedIndex].value+'" />';
+									document.getElementById('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+SearchScreenCount+']['+elem.getAttribute('name')+']" value="'+elem.options[elem.selectedIndex].value+'" />';
 							}
 						}
 					}
+
 					SearchScreenCount++;
+
 					// PLACE SEARCH SCREEN
-					document.getElementById("search_screen").style.top = getYPos('end'+(i-1)) + 20;
-					document.getElementById("search_screen").style.left = getXPos('start'+(i-1)) + (getXPos('end'+(i-1)) - getXPos('start'+(i-1)))/2;
+					//document.getElementById("search_screen").style.top = getYPos('end'+(i-1));
+					var startOffset = $( '#start' + ( i - 1 ) ).position();
+					$("#search_screen").css( 'margin-left', startOffset.left + 15 );
 					document.getElementById('search_contents').innerHTML = replaceAll(document.getElementById('hidden_search_contents').innerHTML,'div_id','id').replace('_searchform_','searchform'+SearchScreenCount);
 					if ( title=='Present' || title=='Absent' || title=='Enrolled' || title.substring( 0, 8 ) == 'Orchard:' )
 					{
@@ -287,18 +290,21 @@ function runQuery()
 				document.forms['main_form'].elements[elemindex].value='';
 		}
 		document.forms['main_form'].elements['breakdown'].value = document.getElementById('breakdown').options[document.getElementById('breakdown').selectedIndex].value;
+
 		for(elemindex = 0;elemindex<elems.length;elemindex++)
 		{
 			elem = document.forms[formname].elements[elemindex];
 			if ( elem.name != 'itemname' )
 			{
 				if ( elem.options )
-					document.getElementById('hidden_permanent_search_contents').innerHTML = document.getElementById('hidden_permanent_search_contents').innerHTML + '<input type="hidden" name="screen['+SearchScreenCount+']['+elem.getAttribute('name')+']" value="'+elem.options[elem.selectedIndex].value+'" />';
+					document.getElementById('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+ SearchScreenCount +']['+elem.getAttribute('name')+']" value="'+elem.options[elem.selectedIndex].value+'" />';
 				else if ( elem.value )
-					document.getElementById('hidden_permanent_search_contents').innerHTML = document.getElementById('hidden_permanent_search_contents').innerHTML + '<input type="hidden" name="screen['+SearchScreenCount+']['+elem.getAttribute('name')+']" value="'+elem.value+'" />';
-			}
+					document.getElementById('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+ SearchScreenCount +']['+elem.getAttribute('name')+']" value="'+elem.value+'" />';
+					
+			console.log(document.getElementById('hidden_permanent_search_contents').innerHTML);}
 		}
 	}
+
 	document.forms.main_form.query.value = document.getElementById('equation_div').innerHTML;
 	document.getElementById('search_screen').style.visibility = 'hidden';
 	SendXMLRequest('main_form','XMLHttpRequest');
@@ -324,17 +330,25 @@ function saveQuery()
 			if (elem.name!='itemname')
 			{
 				if (elem.options)
-					document.getElementById('hidden_permanent_search_contents').innerHTML = document.getElementById('hidden_permanent_search_contents').innerHTML + '<input type="hidden" name="screen['+SearchScreenCount+']['+elem.getAttribute('name')+']" value="'+elem.options[elem.selectedIndex].value+'" />';
+					document.getElementById('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+ SearchScreenCount +']['+elem.getAttribute('name')+']" value="'+elem.options[elem.selectedIndex].value+'" />';
 				else if (elem.value)
-					document.getElementById('hidden_permanent_search_contents').innerHTML = document.getElementById('hidden_permanent_search_contents').innerHTML + '<input type="hidden" name="screen['+SearchScreenCount+']['+elem.getAttribute('name')+']" value="'+elem.value+'" />';
+					document.getElementById('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+ SearchScreenCount +']['+elem.getAttribute('name')+']" value="'+elem.value+'" />';
 			}
 		}
+		SearchScreenCount++;
 	}
-	document.forms.main_form.query.value = document.getElementById('equation_div').innerHTML;
+
+	// Reset:
+	SearchScreenCount = 0;
+
+	document.forms.main_form.query.value = document.getElementById('equation_div').innerHTML.replace("+",'%2B');
 	document.getElementById('equation_div').innerHTML = '';
 	document.getElementById('search_screen').style.visibility = 'hidden';
 	document.getElementById('save_screen').style.visibility = 'hidden';
 	SendXMLRequest('main_form','saveXMLHttpRequest');
+
+	document.getElementById('hidden_permanent_search_contents').innerHTML = '';
+	document.getElementById('equation_div').innerHTML = '';
 }
 
 function replaceAll( Source, stringToFind, stringToReplace ) {
