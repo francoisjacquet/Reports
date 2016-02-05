@@ -82,23 +82,17 @@ if ( $_REQUEST['modfunc'] === 'run' )
 
 				echo '<td rowspan="' . $rowspan . '" class="valign-top center">';
 
-				if ( isset( $_REQUEST['text'][ $row ][ $col ] ) )
-				{
-					echo '<b>' . $_REQUEST['text'][ $row ][ $col ] . '</b>';
-
-					if ( isset( $_REQUEST['calculation'][ $row ][ $col ] ) )
-					{
-						echo '<br />';
-					}
-				}
-
 				if ( isset( $_REQUEST['calculation'][ $row ][ $col ] ) )
 				{
-					echo _runCalc(
+					$calc = _runCalc(
 						$_REQUEST['calculation'][ $row ][ $col ],
 						$_REQUEST['breakdown'][ $row ][ $col ],
 						$_REQUEST['graph'][ $row ][ $col ]
 					);
+
+					echo '<b>' . $_REQUEST['text'][ $row ][ $col ] . ': ' .
+						$_ROSARIO[ 'CalcTitle' . $_REQUEST['calculation'][ $row ][ $col ] ] . '</b><br />' .
+						$calc;
 				}
 
 				echo '</td>';
@@ -268,7 +262,7 @@ function replaceAll( haystack, needle, replacement )
 		'',
 		$breakdown_options,
 		dgettext( 'Reports', 'Breakdown' ),
-		'required style="max-width:150px;"'
+		'style="max-width:150px;"'
 	);
 
 	$graph = CheckboxInput( '', 'graphcell_id', dgettext( 'Reports', 'Graph Results' ), '', true );
@@ -334,15 +328,17 @@ function _runCalc( $calculation_id, $breakdown, $graph )
 
 	$_runCalc_start_REQUEST = $_REQUEST;
 
-	if ( ! isset( $_ROSARIO[ 'Calc' . mb_substr( $column, 12 ) ] ) )
+	require_once 'modules/Reports/includes/ReportsCalculations.fnc.php';
+
+	if ( ! isset( $_ROSARIO[ 'Calc' . $calculation_id ] ) )
 	{
 		$url_RET = DBGet( DBQuery( "SELECT URL,TITLE
 			FROM SAVED_CALCULATIONS
-			WHERE ID='" . $calculation_id . "'" ) );
+			WHERE ID='" . $calculation_id . "'" ), array( 'URL' => '_makeURL' ) );
 
-		$_ROSARIO[ 'CalcTitle' . mb_substr( $column, 12 ) ] = $url_RET[1]['TITLE'];
+		$_ROSARIO[ 'CalcTitle' . $calculation_id ] = $url_RET[1]['URL'];
 
-		$url = $url_RET[1]['URL'];
+		/*$url = $url_RET[1]['URL'];
 
 		$url = urldecode( $url );
 
@@ -375,14 +371,17 @@ function _runCalc( $calculation_id, $breakdown, $graph )
 			}
 
 			eval( $code );
-		}
+		}*/
 
 		$_ROSARIO[ 'Calc' . $calculation_id ] = $_REQUEST;
 	}
 	else
 		$_REQUEST = $_ROSARIO[ 'Calc' . $calculation_id ];
 
-	$_REQUEST['breakdown'] = $breakdown;
+	if ( $breakdown )
+	{
+		$_REQUEST['breakdown'] = $breakdown;
+	}
 
 	/*if ( $_REQUEST['breakdown'] == 'CUSTOM_44' ) // RosarioSIS?
 	{
@@ -394,8 +393,6 @@ function _runCalc( $calculation_id, $breakdown, $graph )
 
 	$_REQUEST['graph'] = $graph;
 
-	$_REQUEST['equation_title'] = $_ROSARIO[ 'CalcTitle' . $calculation_id ];
-
 	$num = $_runCalc_num;
 
 	// So Calculations.php doesn't include the functions within this function.
@@ -404,8 +401,6 @@ function _runCalc( $calculation_id, $breakdown, $graph )
 	$_REQUEST['modfunc'] = 'echoXMLHttpRequest';
 
 	$return = require 'modules/Reports/Calculations.php';*/
-
-	require_once 'modules/Reports/includes/ReportsCalculations.fnc.php';
 
 	$query = _makeQuery( isset( $_POST['query'] ) ? $_POST['query'] : $_REQUEST['query'] );
 
