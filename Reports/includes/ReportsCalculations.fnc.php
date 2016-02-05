@@ -341,12 +341,12 @@ function _getAJAXResults( $query, $modfunc )
 	{
 		if ( isset( $_REQUEST['breakdown'] ) )
 		{
-			$num = 1;
-
 			$RET = array();
 
 			foreach ( (array) $group as $value )
 			{
+				$num = 1;
+
 				$row++;
 
 				/*if ( isset( $_REQUEST['screen'] ) )
