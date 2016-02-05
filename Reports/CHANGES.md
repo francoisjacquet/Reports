@@ -5,6 +5,7 @@ Changes in 1.2
 --------------
 - Adjust Search screens position and reset Equation on Save in Calculations.php & functions.js
 - Add equation to Calculation Title in CalculationsReports.php
+- Fix search screens, Age breakdown, _makeURL() & _makeScreens() in ReportsCalculations.fnc.php
 
 Changes in 1.1
 --------------

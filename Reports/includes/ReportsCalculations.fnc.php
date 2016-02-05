@@ -115,6 +115,8 @@ function _getAJAXResults( $query, $modfunc )
 		$_runCalc_start_REQUEST,
 		$num;
 
+	$num = 1;
+
 	$results = '';
 
 	if ( isset( $_REQUEST['breakdown'] ) )
@@ -172,15 +174,12 @@ function _getAJAXResults( $query, $modfunc )
 
 			foreach ( (array) $_REQUEST as $key => $value )
 			{
-				if ( mb_substr( $key, 0, 5 ) === 'cust[' )
+				// Is array
+				// for example: ['cust[CUSTOM_XXX]'] or ['month_cust_begin[CUSTOM_XXX]']
+				// => ['cust']['CUSTOM_XXX']
+				if ( mb_strpos( $key, '[' ) !== false )
 				{
-					$_REQUEST['cust'][ mb_substr( $key, 5 ) ] = $value;
-
-					unset( $_REQUEST[ $key ] );
-				}
-				elseif ( mb_substr( $key, 0, 8 ) === 'test_no[' )
-				{
-					$_REQUEST['test_no'][ mb_substr( $key, 8 ) ] = $value;
+					$_REQUEST[ mb_substr( $key, 0, mb_strpos( $key, '[' ) ) ][ mb_substr( $key, mb_strpos( $key, '[' ) + 1 ) ] = $value;
 
 					unset( $_REQUEST[ $key ] );
 				}
@@ -200,7 +199,8 @@ function _getAJAXResults( $query, $modfunc )
 			$group = DBGet( DBQuery( "SELECT s.STUDENT_ID AS ID,s.LAST_NAME||', '||s.FIRST_NAME AS TITLE
 				FROM STUDENTS s,STUDENT_ENROLLMENT ssm
 				WHERE s.STUDENT_ID=ssm.STUDENT_ID
-				AND " . str_replace( 'SCHOOL_ID', 'ssm.SCHOOL_ID', $extra_schools ) . " ssm.SYEAR='" . UserSyear() . "' " .
+				AND " . str_replace( 'SCHOOL_ID', 'ssm.SCHOOL_ID', $extra_schools ) . " ssm.SYEAR='" . UserSyear() . "'
+				AND ('".DBDate()."' BETWEEN ssm.START_DATE AND ssm.END_DATE OR ssm.END_DATE IS NULL) " .
 				$extra .
 				' ORDER BY LAST_NAME,FIRST_NAME' ) );
 		}
@@ -230,16 +230,12 @@ function _getAJAXResults( $query, $modfunc )
 
 			foreach ( (array) $group_RET as $age )
 			{
-				$i++;
-
-				$group[ $i ]['ID'] = $age['AGE'];
-
-				if ( ! $age['AGE'] )
+				if ( $age['AGE'] )
 				{
-					$group[ $i ]['TITLE'] = _( 'No Value' );
-				}
-				else
-				{
+					$i++;
+
+					$group[ $i ]['ID'] = $age['AGE'];
+
 					$group[ $i ]['TITLE'] = sprintf( dgettext( 'Reports', '%s years' ), $age['AGE'] );
 				}
 			}
@@ -280,11 +276,11 @@ function _getAJAXResults( $query, $modfunc )
 	{
 		if ( isset( $_REQUEST['breakdown'] ) )
 		{
-			$start_num = 1;
-
 			foreach ( (array) $group as $value )
 			{
-				if ( isset( $_REQUEST['screen'] ) )
+				$num = 1;
+
+				/*if ( isset( $_REQUEST['screen'] ) )
 				{
 					for ( $i = 1; $i <= 15; $i++ )
 					{
@@ -295,19 +291,20 @@ function _getAJAXResults( $query, $modfunc )
 						else
 							$_REQUEST['screen'][ $i ][ $var ] = $value['ID'];
 					}
-				}
-
-				/*foreach($_REQUEST['screen'] as $key_num=>$values)
-				{
-					if(substr($var,0,6)=='CUSTOM')
-						$_REQUEST['screen'][$key_num]['cust'][$var] = $value['ID'];
-					else
-						$_REQUEST['screen'][$key_num][$var] = $value['ID'];
 				}*/
 
-				$num = $start_num;
+				// Add breakdown to each screen.
+				foreach ( (array) $_REQUEST['screen'] as $key_num => $values )
+				{
+					if ( mb_substr( $var, 0, 6 ) === 'CUSTOM' )
+					{
+						$_REQUEST['screen'][ $key_num ]['cust'][ $var ] = $value['ID'];
+					}
+					else
+						$_REQUEST['screen'][ $key_num ][ $var ] = $value['ID'];
+				}
 
-				// Build breakdown fake $_REQUEST var for appendSQL().
+				// Build breakdown fake $_REQUEST var for appendSQL() if no screens.
 				if ( mb_substr( $var, 0, 6 ) === 'CUSTOM' )
 				{
 					$_REQUEST['cust'][ $var ] = $value['ID'];
@@ -344,15 +341,15 @@ function _getAJAXResults( $query, $modfunc )
 	{
 		if ( isset( $_REQUEST['breakdown'] ) )
 		{
-			$RET = array();
+			$num = 1;
 
-			$start_num = 1;
+			$RET = array();
 
 			foreach ( (array) $group as $value )
 			{
 				$row++;
 
-				if ( isset( $_REQUEST['screen'] ) )
+				/*if ( isset( $_REQUEST['screen'] ) )
 				{
 					for ( $i = 1; $i <= 15; $i++ )
 					{
@@ -363,9 +360,18 @@ function _getAJAXResults( $query, $modfunc )
 						else
 							$_REQUEST['screen'][ $i ][ $var ] = $value['ID'];
 					}
-				}
+				}*/
 
-				$num = $start_num;
+				// Add breakdown to each screen.
+				foreach ( (array) $_REQUEST['screen'] as $key_num => $values )
+				{
+					if ( mb_substr( $var, 0, 6 ) === 'CUSTOM' )
+					{
+						$_REQUEST['screen'][ $key_num ]['cust'][ $var ] = $value['ID'];
+					}
+					else
+						$_REQUEST['screen'][ $key_num ][ $var ] = $value['ID'];
+				}
 
 				// Build breakdown fake $_REQUEST var for appendSQL().
 				if ( mb_substr( $var, 0, 6 ) === 'CUSTOM' )
@@ -402,6 +408,10 @@ function _getAJAXResults( $query, $modfunc )
 			{
 				$cat_column = _( 'Grade' );
 			}
+			elseif ( $_REQUEST['breakdown'] === 'age' )
+			{
+				$cat_column = _( 'Age' );
+			}
 			elseif ( $_REQUEST['breakdown'] === 'stuid' )
 			{
 				$cat_column = sprintf( _( '%s ID' ), Config( 'NAME' ) );
@@ -417,7 +427,7 @@ function _getAJAXResults( $query, $modfunc )
 				$cat_column = $custom_RET[1]['TITLE'];
 			}
 
-			$columns = array( 'CATEGORY' => $cat_column, 'VALUE' => $_ROSARIO['CalcTitle'] );
+			$columns = array( 'CATEGORY' => $cat_column, 'VALUE' => $_REQUEST['calc_title'] );
 
 			if ( isset( $_REQUEST['graph'] ) )
 			{
@@ -475,7 +485,7 @@ function _makeSearchInput( $field )
 			return TextInput(
 				$value,
 				'cust[' . $field['COLUMN_NAME'] . ']',
-				'size="30"',
+				'size="20"',
 				$div
 			);
 		break;
@@ -527,11 +537,16 @@ function _makeSearchInput( $field )
 
 			$return .= '</SELECT>';*/
 
+			foreach ( (array) $options as $option )
+			{
+				$options_with_keys[ $option ] = $option;
+			}
+
 			return SelectInput(
 				$value,
 				'cust[' . $field['COLUMN_NAME'] . ']',
 				'',
-				array( '!' => _( 'No Value' ) ) + $options,
+				array( '!' => _( 'No Value' ) ) + $options_with_keys,
 				'N/A',
 				'style="max-width:250px;"',
 				$div
@@ -586,7 +601,7 @@ function _makeSearchInput( $field )
 				ORDER BY SORT_ORDER" ) );
 
 			/*$return = '<SELECT name="grade"><OPTION value=""></OPTION>';
-			foreach($grades_RET as $grade)
+			foreach ($grades_RET as $grade)
 				$return .= "<OPTION value=" . $grade['ID'] . ">".$grade['TITLE'].'</OPTION>';
 			$return .= '</SELECT>';*/
 
@@ -670,7 +685,7 @@ function _makeSearchInput( $field )
 			$select = "<select name='test_no[]'>";
 			$vals = array('1'=>1,'2'=>2,'3'=>3,'4'=>4,'5'=>5,'6'=>6,'7'=>7,'8'=>8,'9'=>9,'10'=>10,'0'=>'Final');
 			$select .= '<OPTION value="">N/A</OPTION>';
-			foreach($vals as $i=>$val)
+			foreach ($vals as $i=>$val)
 				$select .= "<OPTION value=$i>".$val.'</OPTION>';
 			$select .= '</SELECT>';
 
@@ -680,7 +695,7 @@ function _makeSearchInput( $field )
 
 		case 'other':
 
-			return '<input type="text" name="' . $field['COLUMN_NAME'] . ' size="30" />';
+			return '<input type="text" name="' . $field['COLUMN_NAME'] . '" size="20" />';
 
 		break;
 	}
@@ -696,22 +711,20 @@ function _getResults( $type, $number, $index = '' )
 
 	$start_REQUEST = $_REQUEST;
 
-	if ( isset( $_REQUEST['screen'] ) )
+	if ( isset( $_REQUEST['screen'][ $num ] ) )
 	{
 		$_REQUEST = $_REQUEST['screen'][ $num ];
 	}
 
 	foreach ( (array) $_REQUEST as $key => $value )
 	{
-		if ( mb_substr( $key, 0, 5 ) == 'cust[' )
+		// Is array
+		// for example: ['cust[CUSTOM_XXX]'] or ['month_cust_begin[CUSTOM_XXX]']
+		// => ['cust']['CUSTOM_XXX']
+		if ( mb_strpos( $key, 'cust' ) !== false &&
+			mb_strpos( $key, '[' ) !== false )
 		{
-			$_REQUEST['cust'][ mb_substr( $key, 5 ) ] = $value;
-
-			unset( $_REQUEST[ $key ]);
-		}
-		elseif ( mb_substr( $key, 0, 8 ) == 'test_no[' )
-		{
-			$_REQUEST['test_no'][ mb_substr( $key, 8 ) ] = $value;
+			$_REQUEST[ mb_substr( $key, 0, mb_strpos( $key, '[' ) ) ][ mb_substr( $key, mb_strpos( $key, '[' ) + 1 ) ] = $value;
 
 			unset( $_REQUEST[ $key ] );
 		}
@@ -912,7 +925,7 @@ function _getResults( $type, $number, $index = '' )
 			$RET = DBGet(DBQuery("SELECT ssm.STUDENT_ID FROM STUDENT_ENROLLMENT ssm,STUDENTS s WHERE s.STUDENT_ID=ssm.STUDENT_ID AND ssm.SYEAR='".UserSyear()."' ".str_replace('SCHOOL_ID','ssm.SCHOOL_ID',$extra_schools)." ".$extra));
 			if(count($RET))
 			{
-				foreach($RET as $student)
+				foreach ($RET as $student)
 				{
 					$student_ids .= $student['STUDENT_ID'].',';
 				}
@@ -926,15 +939,15 @@ function _getResults( $type, $number, $index = '' )
 			if(count($students_RET))
 			{
 				$student_ids = array();
-				foreach($students_RET as $school_id=>$students)
+				foreach ($students_RET as $school_id=>$students)
 				{
-					foreach($students as $student)
+					foreach ($students as $student)
 						$student_ids[$student['SCHOOL_ID']] .= $student['ID'].',';
 				}
-				foreach($student_ids as $i=>$value)
+				foreach ($student_ids as $i=>$value)
 					$student_ids[$i] = substr($value,0,-1);
 				$tests_RET = DBGet(DBQuery("SELECT testid from orchardtest where name like '%$test_title%'",'mysql'));
-				foreach($tests_RET as $test)
+				foreach ($tests_RET as $test)
 					$test_ids .= $test['TESTID'].',';
 				$test_ids = substr($test_ids,0,-1);
 				if(substr($start_date,7,2)<50)
@@ -942,13 +955,13 @@ function _getResults( $type, $number, $index = '' )
 				else
 					$start = '19'.substr($start_date,7,2).MonthNWSwitch(substr($start_date,3,3),'tonum').substr($start_date,0,2).'000000';
 				$end = '20'.substr($end_date,7,2).MonthNWSwitch(substr($end_date,3,3),'tonum').substr($end_date,0,2).'999999';
-				foreach($student_ids as $school_id=>$student_ids_list)
+				foreach ($student_ids as $school_id=>$student_ids_list)
 				{
 					$RET = DBGet(DBQuery("SELECT correct,total,studentid from orchardtestrecord where slgtime BETWEEN '$start' AND '$end' AND productcode IN ($test_ids) and studentid IN ($student_ids_list) AND SCHOOL_ID='$school_id' ORDER BY STUDENTID,SLGTIME ASC",'mysql'));
 					$remote_type = false;
 					$student_test_count = array();
 
-					foreach($RET as $i=>$value)
+					foreach ($RET as $i=>$value)
 					{
 						if(isset($_REQUEST['test_no']))
 							$student_test_count[$value['STUDENTID']]++;
@@ -988,7 +1001,7 @@ function _getResults( $type, $number, $index = '' )
 			$RET = DBGet(DBQuery("SELECT ssm.STUDENT_ID FROM STUDENT_ENROLLMENT ssm,STUDENTS s WHERE s.STUDENT_ID=ssm.STUDENT_ID AND ssm.SYEAR='".UserSyear()."' ".str_replace('SCHOOL_ID','ssm.SCHOOL_ID',$extra_schools)." ".$extra));
 			if(count($RET))
 			{
-				foreach($RET as $student)
+				foreach ($RET as $student)
 				{
 					$student_ids .= $student['STUDENT_ID'].',';
 				}
@@ -1002,19 +1015,19 @@ function _getResults( $type, $number, $index = '' )
 			if(count($students_RET))
 			{
 				$student_ids = array();
-				foreach($students_RET as $school_id=>$students)
+				foreach ($students_RET as $school_id=>$students)
 				{
-					foreach($students as $student)
+					foreach ($students as $student)
 						$student_ids[$student['SCHOOL_ID']] .= $student['ID'].',';
 				}
-				foreach($student_ids as $i=>$value)
+				foreach ($student_ids as $i=>$value)
 					$student_ids[$i] = substr($value,0,-1);
-				foreach($student_ids as $school_id=>$student_ids_list)
+				foreach ($student_ids as $school_id=>$student_ids_list)
 				{
 					$RET = DBGet(DBQuery("SELECT studentid,sum(tot) as tot from orchardtimeontask where studentid IN ($student_ids_list) and SCHOOL_ID='$school_id' group by studentid",'mysql'));
 					$remote_type = false;
 
-					foreach($RET as $value)
+					foreach ($RET as $value)
 						$array[] = $value['TOT'];
 				}
 			}
@@ -1028,6 +1041,7 @@ function _getResults( $type, $number, $index = '' )
 
 	//var_dump($array);
 
+	// Screen++.
 	$num++;
 
 	return $array;
@@ -1074,16 +1088,17 @@ function _makeText( $value, $column )
  */
 function _makeURL( $value, $column )
 {
-	global $screen;
+	global $screen,
+		$_ROSARIO;
 
-	$value = urldecode( $value );
+	/*$value = urldecode( $value );
 
 	$start = mb_strpos( $value, 'query=' ) + 6;
 
 	$url = $value;
 
 	$vars = mb_substr( $url, ( mb_strpos( $url, '?' ) + 1 ) );
-	
+
 	$vars = str_replace( '&amp;', '&', $vars );
 
 	$vars = explode( '&', $vars );
@@ -1105,18 +1120,63 @@ function _makeURL( $value, $column )
 
 			eval( $code );
 		}
+	}*/
+
+	$url = urldecode( $value );
+
+	$start = mb_strpos( $url, 'query=' ) + 6;
+
+	$vars = mb_substr( $url, ( mb_strpos( $url, '?' ) + 1 ) );
+
+	$modname = mb_substr( $url, 0, mb_strpos( $url, '?' ) );
+
+	$vars = str_replace( '&amp;', '&', $vars );
+
+	$vars = explode( '&', $vars );
+
+	$save_REQUEST = $_REQUEST;
+
+	$_REQUEST = array();
+
+	foreach ( (array) $vars as $code )
+	{
+		$equals = mb_strpos( $code, '=' );
+
+		if ( mb_strpos( $code, '[' ) !== false )
+		{
+			$code = "\$_REQUEST[" . preg_replace(
+				'/([^]])\[/',
+				'\1][',
+				mb_substr( $code, 0, $equals )
+			) . "='" . mb_substr( $code, $equals + 1 ) . "';";
+		}
+		else
+		{
+			$code = "\$_REQUEST['" . mb_substr( $code, 0, $equals ) . "']='" .
+				mb_substr( $code, $equals + 1 ) . "';";
+		}
+
+		eval( $code );
 	}
 
-	return _makeScreens( substr(
-		$value,
+	$screens_titles = _makeScreens( mb_substr(
+		$url,
 		$start,
-		( mb_strpos( mb_strtolower( $value ), '<img' ) - $start )
+		( mb_strpos( $url, '<img' ) - $start )
 	) );
+
+	if ( $save_REQUEST['modname'] == 'Reports/Calculations.php' )
+	{
+		$_REQUEST = $save_REQUEST;
+	}
+
+	return $screens_titles;
 }
 
 
 /**
  * Create RC Graph
+ * Adds a relevance bar after the result.
  *
  * Local function
  *
@@ -1124,9 +1184,7 @@ function _makeURL( $value, $column )
  *
  * @global $_ROSARIO uses $_ROSARIO['_createRCGraphs_max']
  *
- * @param  array $RET [description]
- *
- * @return [type]      [description]
+ * @param  array $RET Results array
  */
 function _createRCGraphs( & $RET )
 {
@@ -1151,8 +1209,7 @@ function _createRCGraphs( & $RET )
  *
  * @see _makeURL()
  *
- * @global $screen
- * @global $fields_RET, see Calculations.php
+ * @static $fields_RET
  *
  * @param  string $equation Equation
  *
@@ -1160,35 +1217,75 @@ function _createRCGraphs( & $RET )
  */
 function _makeScreens( $equation )
 {
-	global $screen,
-		$fields_RET;
+	static $fields_RET;
 
 	$equation = mb_strtolower( stripslashes( $equation ) );
 
-	while ( $pos = mb_strpos( $equation, '<b>)</b>' ) ) // RosarioSIS?
+	$screen_count = 0;
+
+	while ( $pos = mb_strpos( $equation, '<b>)</b>' ) )
 	{
 		$screen_count++;
 
-		// Date
-		if ( isset( $screen[ $screen_count ]['month_start'] )
-			&& isset( $screen[ $screen_count ]['month_end'] ) )
+		if ( isset( $_REQUEST['screen'][ $screen_count ] ) )
 		{
-			$extra = '<i class="size-1">' . _( 'Between' ) .
+			$screen = $_REQUEST['screen'][ $screen_count ];
+		}
+		else
+			$screen = false;
+
+		$extra = '';
+
+		// Grade Level.
+		if ( isset( $screen['grade'] ) )
+		{
+			$extra .= _( 'Grade Level' ) . ': ' . GetGrade( $screen['grade'] ) . '; ';
+		}
+
+		// All Schools.
+		if ( isset( $screen['_search_all_schools'] ) )
+		{
+			$extra .= _( 'All Schools' ) . '; ';
+		}
+
+		// Student ID.
+		if ( isset( $screen['stuid'] ) )
+		{
+			$extra .= _( 'Student ID' ) . ': ' . $screen['stuid'] . '; ';
+		}
+
+		// Last name (starts with, case insensitive).
+		if ( isset( $screen['last'] ) )
+		{
+			$extra .= _( 'Last Name starts with' ) . ': ' . $screen['last'] . '; ';
+		}
+
+		// First name (starts with, case insensitive).
+		if ( isset( $screen['first'] ) )
+		{
+			$extra .= _( 'First Name starts with' ) . ': ' . $screen['first'] . '; ';
+		}
+
+		// Date.
+		if ( isset( $screen['month_start'] )
+			&& isset( $screen['month_end'] ) )
+		{
+			$extra .= '<i class="size-1">' . _( 'Between' ) .
 				ProperDate(
-					$screen[ $screen_count ]['day_start'] . '-' .
-					$screen[ $screen_count ]['month_start'] . '-' .
-					$screen[ $screen_count ]['year_start'],
+					$screen['day_start'] . '-' .
+					$screen['month_start'] . '-' .
+					$screen['year_start'],
 					'short'
 				) .	' &amp; ' .
 				ProperDate(
-					$screen[ $screen_count ]['day_end'] . '-' .
-					$screen[ $screen_count ]['month_end'] . '-' .
-					$screen[ $screen_count ]['year_end'],
+					$screen['day_end'] . '-' .
+					$screen['month_end'] . '-' .
+					$screen['year_end'],
 					'short'
 				) . '</i>; ';
 		}
 		else
-			$extra = '';
+			
 
 		// Test No.
 		/*if ( isset( $screen[ $screen_count ]['test_no'] )
@@ -1206,14 +1303,22 @@ function _makeScreens( $equation )
 		}*/
 
 		// Custom
-		if ( isset( $screen[ $screen_count ]['cust'] ) )
+		if ( isset( $screen['cust'] ) )
 		{
-			//foreach($screen[$screen_count]['cust'] as $field=>$value)
-			foreach ( (array)$fields_RET as $field )
+			if ( ! $fields_RET )
 			{
-				if ( isset( $screen[ $screen_count ]['cust'][ 'CUSTOM_' . $field['ID'] ] ) )
+				$fields_RET = DBGet( DBQuery( "SELECT ID,TITLE
+					FROM CUSTOM_FIELDS
+					WHERE TYPE='select'
+					ORDER BY TITLE" ) );
+			}
+
+			//foreach ($_REQUEST['screen'][$screen_count]['cust'] as $field=>$value)
+			foreach ( (array) $fields_RET as $field )
+			{
+				if ( isset( $screen['cust'][ 'CUSTOM_' . $field['ID'] ] ) )
 				{
-					$extra .= $field['TITLE'] . ': ' . $screen[ $screen_count ]['cust'][ 'CUSTOM_' . $field['ID'] ] . '; ';
+					$extra .= $field['TITLE'] . ': ' . $screen['cust'][ 'CUSTOM_' . $field['ID'] ] . '; ';
 				}
 			}
 		}
@@ -1474,3 +1579,4 @@ function _avg1( $arr )
 
 	return _average( $total_array );
 }
+
