@@ -51,7 +51,7 @@ HTML;
 	</ul>
 </p>
 <p>
-	When adding a function to the equation, you will notice the Search screens popping up: the dropdown lists will allow you to limit the results of the equation. Each search screen corresponds to a function. If your equation contains more than one function, you can associate it a new search screen by clicking on the add icon (+).
+	When adding a function to the equation, you will notice a Search screen popping up: the dropdown lists will allow you to filter (add filter by clicking on the plus icon (+)) the results of the function. Each search screen corresponds to a function. If your equation contains more than one function, a new search screen will pop up.
 </p>
 <p>
 	At the bottom of the screen, a list of Saved Equations may appear. Saved equations can be used within the <i>Calculations Reports</i> program.
