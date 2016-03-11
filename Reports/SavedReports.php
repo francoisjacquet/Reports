@@ -17,7 +17,7 @@ $reload_side = '<script>
 if ( $_REQUEST['modfunc'] === 'new'
 	&& AllowEdit() )
 {
-	$report_id = DBGet( DBQuery( "SELECT " . db_seq_nextval( 'SAVED_REPORTS_SEQ' ) . ' AS ID' . FROM_DUAL ) );
+	$report_id = DBGet( DBQuery( "SELECT " . db_seq_nextval( 'SAVED_REPORTS_SEQ' ) . ' AS ID' ) );
 
 	$report_id = $report_id[1]['ID'];
 
@@ -100,7 +100,7 @@ if ( isset( $_REQUEST['profiles'] )
 				DBQuery( "INSERT INTO PROFILE_EXCEPTIONS (PROFILE_ID,MODNAME)
 					values('" . $profile_id . "','" . $modname . "')" );
 			}
-			
+
 			if ( ! isset( $_REQUEST['profiles'][ $report_id ][ $profile_id ] ) )
 			{
 				DBQuery( "UPDATE PROFILE_EXCEPTIONS

@@ -1,8 +1,9 @@
 Reports Module
+==============
 
 http://github.com/francoisjacquet/rosariosis-module-reports
 
-Version 1.2 - February, 2016
+Version 1.3 - March, 2016
 
 License GNU GPL v2
 
