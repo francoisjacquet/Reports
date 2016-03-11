@@ -18,7 +18,8 @@
 function ReportsBottomButtons()
 {
 	if ( ! User( 'PROFILE' ) === 'admin'
-		|| ! AllowEdit( 'Reports/SavedReports.php' ) )
+		|| ! AllowEdit( 'Reports/SavedReports.php' )
+		|| ! isset( $_SESSION['List_PHP_SELF'] ) )
 	{
 		return false;
 	}
