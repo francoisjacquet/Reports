@@ -23,13 +23,13 @@ DELETE FROM profile_exceptions WHERE modname LIKE 'Reports/RunReport.php%';
 -- Delete saved_calculations table
 --
 
-DROP SEQUENCE saved_calculations_seq;
-DROP TABLE saved_calculations;
+DROP SEQUENCE IF EXISTS saved_calculations_seq;
+DROP TABLE IF EXISTS saved_calculations;
 
 
 --
 -- Delete saved_reports table
 --
 
-DROP SEQUENCE saved_reports_seq;
-DROP TABLE saved_reports;
+DROP SEQUENCE IF EXISTS saved_reports_seq;
+DROP TABLE IF EXISTS saved_reports;
