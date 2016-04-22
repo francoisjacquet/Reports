@@ -1,6 +1,8 @@
 Reports Module
 ==============
 
+![screenshot](https://raw.githubusercontent.com/francoisjacquet/rosariosis-module-reports/master/Reports/screenshot.png)
+
 http://github.com/francoisjacquet/rosariosis-module-reports
 
 Version 1.3 - March, 2016
