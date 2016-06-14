@@ -1,9 +1,9 @@
 Reports Module
 ==============
 
-![screenshot](https://raw.githubusercontent.com/francoisjacquet/rosariosis-module-reports/master/Reports/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/francoisjacquet/Reports/master/Reports/screenshot.png)
 
-http://github.com/francoisjacquet/rosariosis-module-reports
+http://github.com/francoisjacquet/Reports
 
 Version 1.3 - March, 2016
 
@@ -29,8 +29,8 @@ Reports
 
 INSTALL
 -------
-Copy the Reports/ folder and its content inside the modules/ folder of RosarioSIS.
+Copy the `Reports/` folder (if named `Reports-master`, rename it) and its content inside the `modules/` folder of RosarioSIS.
 
-Go to School Setup > School Configuration > Modules and click "Activate".
+Go to _School Setup > School Configuration > Modules_ and click "Activate".
 
 Requires RosarioSIS 2.8.25+
