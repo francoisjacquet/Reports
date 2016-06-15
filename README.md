@@ -1,7 +1,7 @@
 Reports Module
 ==============
 
-![screenshot](https://raw.githubusercontent.com/francoisjacquet/Reports/master/Reports/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/francoisjacquet/Reports/master/screenshot.png)
 
 http://github.com/francoisjacquet/Reports
 
