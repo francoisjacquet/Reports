@@ -128,7 +128,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 	DrawHeader( ProgramTitle() );
 
 	DrawHeader( '<div id="status_div">&nbsp;</div>' );
-	
+
 	$field_categories = array(
 		'',
 		dgettext( 'Reports', 'Time Values' ),
@@ -189,12 +189,12 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 		_( 'Science' ),
 		_( 'Biology' ),
 	);
-	
+
 	foreach ( (array)$subjects as $test )
 	{
 		$items['field'][] = 'Orchard: ' . $test . ' ' . _( 'Score' );
 	}*/
-	
+
 	$items['field'][] = '~';
 
 	for ( $i = 0; $i <= 9; $i++ )
@@ -204,12 +204,12 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 
 	$items['field'][] = '0';
 	$items['field'][] = '.';
-	
+
 	//$items['field'] += array('~','IL Time','~','0','1','2','3','4','5','6','7','8','9')
 	echo '<br />';
 
-	echo '<table class="width-100p"><tr><td valign=top>';
-	
+	echo '<table class="width-100p"><tr class="st"><td class="valign-top">';
+
 	$content = '<table class="width-100p"><tr><td class="center valign-top"><b>' .
 		dgettext( 'Reports', 'Functions' ) . '</b><br />';
 
@@ -242,7 +242,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 	}
 
 	$content .= '</td></tr></table>';
-	
+
 	echo PopTable( 'header', dgettext( 'Reports', 'Functions' ) . ' &amp; ' . dgettext( 'Reports', 'Operators' ) );
 
 	echo $content;
@@ -373,7 +373,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 	);
 
 	echo PopTable( 'header', dgettext( 'Reports', 'Equation' ), 'style="margin:0 0;"' );
-		
+
 	echo '<table width=100%><tr><td class="align-right">' .
 		$breakdown .
 		'<a href="#" onclick="backspace(); return false;">
@@ -537,7 +537,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 			)
 		) . '</td>
 	</tr></table></div>';*/
-	
+
 	foreach ( (array) $search_fields_RET as $field )
 	{
 		echo '<div id="hidden_search_input' . $field['COLUMN_NAME'] . '" style="visibility:hidden;">
