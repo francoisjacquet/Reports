@@ -30,13 +30,18 @@ function _makeQuery( $query )
 	$query = mb_strtolower( $query );
 
 	// REMOVE HTML TAGS.
-	$query = preg_replace( '/<span id="?/', '<', $query );
+	// PHP Parse error:
+	// syntax error, unexpected '<'
+	// in /var/www/demonstration/modules/Reports/includes/ReportsCalculations.fnc.php(330) :
+	// eval()'d code on line 1,
+	// referer: https://www.rosariosis.org/demonstration/Modules.php?modname=Reports/Calculations.php
+	$query = preg_replace( '/\<span id\="/', '<', $query );
 
 	$query = str_replace( '</span>', '', $query );
 
-	$query = preg_replace( '/<img src=[^>]+>/', '', $query );
+	$query = preg_replace( '/\<img src\=[^\>]+\>/', '', $query );
 
-	$query = preg_replace( '/"?>/', '>', $query );
+	$query = preg_replace( '/"\>/', '>', $query );
 
 	$query = str_replace( '<b>(</b>', '(', $query );
 
@@ -62,20 +67,20 @@ function _makeQuery( $query )
 	$query = str_replace( 'max', '_max', $query );
 
 	$query = preg_replace(
-		"/([a-z_]+)\([ ]*<[a-z]+([0-9]+)>([a-z: ]+)<[a-z0-9]+>[ ]*\)/",
+		"/([a-z_]+)\([ ]*\<[a-z]+([0-9]+)\>([a-z: ]+)\<[a-z0-9]+\>[ ]*\)/",
 		"\\1(_getResults('\\3','\\2'))",
 		$query
 	);
 
 	$query = preg_replace(
-		"/([a-z01_]+)\([ ]*<[a-z]+([0-9]+)>([a-z: ]+)<[a-z0-9]+>[ ]*\)/",
+		"/([a-z01_]+)\([ ]*\<[a-z]+([0-9]+)\>([a-z: ]+)\<[a-z0-9]+\>[ ]*\)/",
 		"\\1(_getResults('\\3','\\2','STUDENT_ID'))",
 		$query
 	);
 
-	$query = preg_replace( '/<start[0-9]+>/', '', $query );
+	$query = preg_replace( '/\<start[0-9]+\>/', '', $query );
 
-	$query = preg_replace( '/<end[0-9]+> */', '', $query );
+	$query = preg_replace( '/\<end[0-9]+\> */', '', $query );
 
 	$query = trim( $query );
 
@@ -223,7 +228,7 @@ function _getAJAXResults( $query, $modfunc )
 			// http://www.sqlines.com/postgresql/how-to/datediff
 			// SELECT (DATE_PART('day', CURRENT_DATE::timestamp - '2011-10-02'::timestamp) / 365.25)::int;
 			$group_RET = DBGet( DBQuery( "SELECT DISTINCT( (DATE_PART('day', CURRENT_TIMESTAMP - s.CUSTOM_200000004::timestamp) / 365.25)::int ) AS AGE
-				FROM STUDENTS s,STUDENT_ENROLLMENT ssm	
+				FROM STUDENTS s,STUDENT_ENROLLMENT ssm
 				WHERE s.STUDENT_ID=ssm.STUDENT_ID
 				AND " . str_replace( 'SCHOOL_ID', 'ssm.SCHOOL_ID', $extra_schools ) . " ssm.SYEAR='" . UserSyear() . "'
 				ORDER BY AGE" ) );
@@ -322,7 +327,7 @@ function _getAJAXResults( $query, $modfunc )
 					$val = ltrim( round( $val, 3 ), '0' );
 				}
 
-				$results .= '<result><id>' . $value['TITLE'] . '</id><title>' . $val . '</title></result>';	
+				$results .= '<result><id>' . $value['TITLE'] . '</id><title>' . $val . '</title></result>';
 			}
 		}
 		else
@@ -399,7 +404,7 @@ function _getAJAXResults( $query, $modfunc )
 					$_ROSARIO['_createRCGraphs_max'] = $val;
 				}
 			}
-			
+
 			if ( $_REQUEST['breakdown'] === 'school' )
 			{
 				$cat_column = _( 'School' );
@@ -638,7 +643,7 @@ function _makeSearchInput( $field )
 
 		case 'timespan':
 
-			$start_date = '01-' . mb_strtoupper( date( 'M-y' ) );
+			$start_date = mb_strtoupper( date( 'y-M' ) ) . '-01';
 
 			$end_date = DBDate();
 
@@ -735,24 +740,24 @@ function _getResults( $type, $number, $index = '' )
 		FROM ATTENDANCE_CALENDAR
 		WHERE SYEAR='" . UserSyear() . "'" ) );
 
-	if ( isset( $_REQUEST['day_start'] )
+	if ( isset( $_REQUEST['year_start'] )
 		&& isset( $_REQUEST['month_start'] )
-		&& isset( $_REQUEST['year_start'] ) )
+		&& isset( $_REQUEST['day_start'] ) )
 	{
-		$start_date = $_REQUEST['day_start'] . '-' .
+		$start_date = $_REQUEST['year_start'] . '-' .
 			$_REQUEST['month_start'] . '-' .
-			$_REQUEST['year_start'];
+			$_REQUEST['day_start'];
 	}
 	else
 		$start_date = $min_max_date[1]['MIN_DATE'];
 
-	if ( isset( $_REQUEST['day_end'] )
+	if ( isset( $_REQUEST['year_end'] )
 		&& isset( $_REQUEST['month_end'] )
-		&& isset( $_REQUEST['year_end'] ) )
+		&& isset( $_REQUEST['day_end'] ) )
 	{
-		$end_date = $_REQUEST['day_end'] . '-' .
+		$end_date = $_REQUEST['year_end'] . '-' .
 			$_REQUEST['month_end'] . '-' .
-			$_REQUEST['year_end'];
+			$_REQUEST['day_end'];
 	}
 	else
 		$end_date = $min_max_date[1]['MAX_DATE'];
@@ -1285,7 +1290,7 @@ function _makeScreens( $equation )
 				) . '</i>; ';
 		}
 		else
-			
+
 
 		// Test No.
 		/*if ( isset( $screen[ $screen_count ]['test_no'] )

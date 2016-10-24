@@ -1,11 +1,14 @@
 # CHANGES
 ## Reports module for RosarioSIS
 
+Changes in 1.4
+--------------
+- SQL fix: use ISO date format for timespan in ReportsCalculations.fnc.php
+
 Changes in 1.3
 --------------
 - Compatibility with RosarioSIS 2.9 in SavedReports.php
 - Use Bottom.php|bottom_buttons hook for Save Report button in functions.php
-
 
 Changes in 1.2
 --------------
