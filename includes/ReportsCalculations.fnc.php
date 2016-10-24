@@ -643,7 +643,7 @@ function _makeSearchInput( $field )
 
 		case 'timespan':
 
-			$start_date = mb_strtoupper( date( 'y-M' ) ) . '-01';
+			$start_date = date( 'Y-m' ) . '-01';
 
 			$end_date = DBDate();
 
