@@ -13,6 +13,11 @@ var i = 0,
 	SearchItemCount = 0,
 	SearchScreenCount = 0;
 
+// Shorten document.getElementById().
+var byId = function( id ) {
+	return document.getElementById( id );
+};
+
 function insertItem( title, type )
 {
 	switch( type )
@@ -22,19 +27,19 @@ function insertItem( title, type )
 			{
 				i++;
 				reg = new RegExp("<img src=[^>]+>");
-				document.getElementById('equation_div').innerHTML = document.getElementById('equation_div').innerHTML.toLowerCase().replace(reg,'<span id="start'+i+'"></span>'+title + '<b>(</b> <img src="modules/Reports/assets/blinking_cursor.gif" /> <b>)</b><span id="end'+i+'"></span>');
+				byId('equation_div').innerHTML = byId('equation_div').innerHTML.toLowerCase().replace(reg,'<span id="start'+i+'"></span>' + title + '<b>(</b> <img src="modules/Reports/assets/blinking_cursor.gif" /> <b>)</b><span id="end'+i+'"></span>');
 				InsertFunction = false;
 				InsertConstant = false;
 				InsertField = true;
-				document.getElementById('status_div').innerHTML = document.getElementById('status_choose_field').innerHTML;
+				byId('status_div').innerHTML = byId('status_choose_field').innerHTML;
 				InFunction = true;
 			}
 			else
 			{
 				if ( InsertField )
-					document.getElementById('status_div').innerHTML = document.getElementById('status_error_function_field').innerHTML;
+					byId('status_div').innerHTML = byId('status_error_function_field').innerHTML;
 				else if ( InsertOperator )
-					document.getElementById('status_div').innerHTML = document.getElementById('status_error_function_operator').innerHTML;
+					byId('status_div').innerHTML = byId('status_error_function_operator').innerHTML;
 			}
 		break;
 
@@ -43,11 +48,11 @@ function insertItem( title, type )
 			{
 				i++;
 				reg = new RegExp("<img src=[^>]+>");
-				document.getElementById('equation_div').innerHTML = document.getElementById('equation_div').innerHTML.toLowerCase().replace(reg,'<span id="start'+i+'"></span>'+title + '<span id="end'+i+'"></span> <img src="modules/Reports/assets/blinking_cursor.gif" /> ');
+				byId('equation_div').innerHTML = byId('equation_div').innerHTML.toLowerCase().replace(reg,'<span id="start'+i+'"></span>'+title + '<span id="end'+i+'"></span> <img src="modules/Reports/assets/blinking_cursor.gif" /> ');
 
 				if ( title.length == 1 )
 				{
-					document.getElementById('status_div').innerHTML = document.getElementById('status_choose_operator').innerHTML;
+					byId('status_div').innerHTML = byId('status_choose_operator').innerHTML;
 					InsertFunction = false;
 					InsertConstant = true;
 					InsertOperator = true;
@@ -55,7 +60,7 @@ function insertItem( title, type )
 				}
 				else
 				{
-					document.getElementById('status_div').innerHTML = document.getElementById('status_choose_operator_or_constant').innerHTML;
+					byId('status_div').innerHTML = byId('status_choose_operator_or_constant').innerHTML;
 					InsertField = false;
 					InsertOperator = true;
 					if (InFunction)
@@ -71,9 +76,9 @@ function insertItem( title, type )
 							if (elem.name!='itemname')
 							{
 								if (elem.value)
-									document.getElementById('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+SearchScreenCount+']['+elem.getAttribute('name')+']" value="'+elem.value+'" />';
+									byId('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+SearchScreenCount+']['+elem.getAttribute('name')+']" value="'+elem.value+'" />';
 								else if (elem.options)
-									document.getElementById('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+SearchScreenCount+']['+elem.getAttribute('name')+']" value="'+elem.options[elem.selectedIndex].value+'" />';
+									byId('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+SearchScreenCount+']['+elem.getAttribute('name')+']" value="'+elem.options[elem.selectedIndex].value+'" />';
 							}
 						}
 					}
@@ -81,30 +86,30 @@ function insertItem( title, type )
 					SearchScreenCount++;
 
 					// PLACE SEARCH SCREEN
-					//document.getElementById("search_screen").style.top = getYPos('end'+(i-1));
+					//byId("search_screen").style.top = getYPos('end'+(i-1));
 					var startOffset = $( '#start' + ( i - 1 ) ).position();
 					$("#search_screen").css( 'margin-left', startOffset.left + 15 );
-					document.getElementById('search_contents').innerHTML = replaceAll(document.getElementById('hidden_search_contents').innerHTML,'div_id','id').replace('_searchform_','searchform'+SearchScreenCount);
+					byId('search_contents').innerHTML = replaceAll(byId('hidden_search_contents').innerHTML,'div_id','id').replace('_searchform_','searchform'+SearchScreenCount);
 					if ( title=='Present' || title=='Absent' || title=='Enrolled' || title.substring( 0, 8 ) == 'Orchard:' )
 					{
 						SearchItemCount++;
-						document.getElementById('search_contents'+SearchItemCount).innerHTML = '<div id="search_item'+SearchItemCount+'">' + document.getElementById('hidden_search_inputtimespan').innerHTML.replace('div_id="_id_"','id="item'+SearchItemCount+'"').replace('_id_','item'+SearchItemCount) + '</div>';
+						byId('search_contents'+SearchItemCount).innerHTML = '<div id="search_item'+SearchItemCount+'">' + byId('hidden_search_inputtimespan').innerHTML.replace('div_id="_id_"','id="item'+SearchItemCount+'"').replace('_id_','item'+SearchItemCount) + '</div>';
 					}
 					/*if ( title.substring( 0, 8 ) == 'Orchard:' )
 					{
 						SearchItemCount++;
-						document.getElementById('search_contents'+SearchItemCount).innerHTML = '<div id="search_item'+SearchItemCount+'">' + document.getElementById('hidden_search_inputtestno').innerHTML.replace('div_id="_id_"','id="item'+SearchItemCount+'"').replace('_id_','item'+SearchItemCount).replace('test_no[]','test_no['+SearchItemCount+']') + '</div>';
+						byId('search_contents'+SearchItemCount).innerHTML = '<div id="search_item'+SearchItemCount+'">' + byId('hidden_search_inputtestno').innerHTML.replace('div_id="_id_"','id="item'+SearchItemCount+'"').replace('_id_','item'+SearchItemCount).replace('test_no[]','test_no['+SearchItemCount+']') + '</div>';
 					}*/
 					newSearchItem();
-					document.getElementById('search_screen').style.visibility = 'visible';
+					byId('search_screen').style.visibility = 'visible';
 				}
 			}
 			else
 			{
 				if ( InsertFunction )
-					document.getElementById('status_div').innerHTML = document.getElementById('status_error_field_function').innerHTML;
+					byId('status_div').innerHTML = byId('status_error_field_function').innerHTML;
 				else if ( InsertOperator )
-					document.getElementById('status_div').innerHTML = document.getElementById('status_error_field_operator').innerHTML;
+					byId('status_div').innerHTML = byId('status_error_field_operator').innerHTML;
 			}
 		break;
 
@@ -114,31 +119,31 @@ function insertItem( title, type )
 				if ( title == '(' && !InsertFunction )
 				{
 					if ( InsertField )
-						document.getElementById('status_div').innerHTML = document.getElementById('status_error_operator_field').innerHTML;
+						byId('status_div').innerHTML = byId('status_error_operator_field').innerHTML;
 					else if ( InsertFunction )
-						document.getElementById('status_div').innerHTML = document.getElementById('status_error_operator_function').innerHTML;
+						byId('status_div').innerHTML = byId('status_error_operator_function').innerHTML;
 					break;
 				}
 				i++;
 				reg = new RegExp("<img src=[^>]+>");
 				if ( title == ')' && InFunction === true )
 				{
-					document.getElementById('equation_div').innerHTML = document.getElementById('equation_div').innerHTML.toLowerCase().replace(reg,'') + ' <img src="modules/Reports/assets/blinking_cursor.gif" /> ';
+					byId('equation_div').innerHTML = byId('equation_div').innerHTML.toLowerCase().replace(reg,'') + ' <img src="modules/Reports/assets/blinking_cursor.gif" /> ';
 					InFunction = false;
 				}
 				else if ( title == '(' || title == ')' )
-					document.getElementById('equation_div').innerHTML = document.getElementById('equation_div').innerHTML.toLowerCase().replace(reg,'<span id="start'+i+'"></span>' + title + ' <span id="end'+i+'"></span><img src="modules/Reports/assets/blinking_cursor.gif" /> ');
+					byId('equation_div').innerHTML = byId('equation_div').innerHTML.toLowerCase().replace(reg,'<span id="start'+i+'"></span>' + title + ' <span id="end'+i+'"></span><img src="modules/Reports/assets/blinking_cursor.gif" /> ');
 				else
-					document.getElementById('equation_div').innerHTML = document.getElementById('equation_div').innerHTML.toLowerCase().replace(reg,'<span id="start'+i+'"></span>' + title + ' <span id="end'+i+'"></span><img src="modules/Reports/assets/blinking_cursor.gif" /> ');
+					byId('equation_div').innerHTML = byId('equation_div').innerHTML.toLowerCase().replace(reg,'<span id="start'+i+'"></span>' + title + ' <span id="end'+i+'"></span><img src="modules/Reports/assets/blinking_cursor.gif" /> ');
 				InsertFunction = true;
 				InsertConstant = true;
 				InsertOperator = false;
 				InsertField = false;
 				if ( title != ')' )
-					document.getElementById('status_div').innerHTML = document.getElementById('status_choose_function').innerHTML;
+					byId('status_div').innerHTML = byId('status_choose_function').innerHTML;
 				else
 				{
-					document.getElementById('status_div').innerHTML = document.getElementById('status_choose_operator_or_save').innerHTML;
+					byId('status_div').innerHTML = byId('status_choose_operator_or_save').innerHTML;
 					InsertOperator = true;
 					InsertFunction = false;
 					InsertField = false;
@@ -148,9 +153,9 @@ function insertItem( title, type )
 			else
 			{
 				if ( InsertField )
-					document.getElementById('status_div').innerHTML = document.getElementById('status_error_operator_field').innerHTML;
+					byId('status_div').innerHTML = byId('status_error_operator_field').innerHTML;
 				else if ( InsertFunction )
-					document.getElementById('status_div').innerHTML = document.getElementById('status_error_operator_function').innerHTML;
+					byId('status_div').innerHTML = byId('status_error_operator_function').innerHTML;
 			}
 		break;
 	}
@@ -164,7 +169,7 @@ function doOnKeyPress( key )
 function backspace()
 {
 	reg = new RegExp('<span id="([a-z0-9]+)">');
-	inner = replaceAll(document.getElementById('equation_div').innerHTML.toLowerCase(),reg,'<span id="$1">');
+	inner = replaceAll(byId('equation_div').innerHTML.toLowerCase(),reg,'<span id="$1">');
 	deleted = inner.substr(inner.lastIndexOf('<span id="start'));
 	search = '>[0-9.]+<span id="end';
 	// FUNCTION HAS BEEN DELETED
@@ -175,7 +180,7 @@ function backspace()
 		InsertConstant = true;
 		InsertOperator = false;
 		InsertField = false;
-		document.getElementById('status_div').innerHTML = document.getElementById('status_choose_function').innerHTML;
+		byId('status_div').innerHTML = byId('status_choose_function').innerHTML;
 	}
 	// FIELD HAS BEEN DELETED
 	else if ( deleted.indexOf( '<b>)</b>' ) != '-1' )
@@ -184,14 +189,14 @@ function backspace()
 		InsertFunction = false;
 		InsertConstant = false;
 		InsertField = true;
-		document.getElementById('status_div').innerHTML = document.getElementById('status_choose_field').innerHTML;
+		byId('status_div').innerHTML = byId('status_choose_field').innerHTML;
 		InFunction = true;
 	}
 	// CONSTANT HAS BEEN DELETED
 	else if ( deleted.search( search ) != -1 )
 	{
 		after = '<img src="modules/Reports/assets/blinking_cursor.gif" />';
-		document.getElementById('status_div').innerHTML = document.getElementById('status_choose_operator_or_constant').innerHTML;
+		byId('status_div').innerHTML = byId('status_choose_operator_or_constant').innerHTML;
 		InsertFunction = false;
 		InsertConstant = true;
 		InsertOperator = true;
@@ -203,10 +208,10 @@ function backspace()
 		after = ' <img src="modules/Reports/assets/blinking_cursor.gif" />';
 		InsertField = false;
 		InsertOperator = true;
-		document.getElementById('status_div').innerHTML = document.getElementById('status_choose_operator').innerHTML;
+		byId('status_div').innerHTML = byId('status_choose_operator').innerHTML;
 	}
-	
-	document.getElementById('equation_div').innerHTML = inner.substr(0,inner.lastIndexOf('<span id="start')) + after;
+
+	byId('equation_div').innerHTML = inner.substr(0,inner.lastIndexOf('<span id="start')) + after;
 }
 
 function getYPos( id )
@@ -216,7 +221,7 @@ function getYPos( id )
 		y = document.layers[id].pageY;
 	else if ( document.all || document.getElementById )
 	{
-		var cell = document.all ? document.all[id] : document.getElementById(id);
+		var cell = document.all ? document.all[id] : byId(id);
 		while(cell)
 		{
 			y += cell.offsetTop;
@@ -233,7 +238,7 @@ function getXPos( id )
 		x = document.layers[id].pageX;
 	else if ( document.all || document.getElementById )
 	{
-		var cell = document.all ? document.all[id] : document.getElementById(id);
+		var cell = document.all ? document.all[id] : byId(id);
 		while(cell)
 		{
 			x += cell.offsetLeft;
@@ -246,9 +251,9 @@ function getXPos( id )
 function newSearchItem()
 {
 	SearchItemCount++;
-	document.getElementById(
+	byId(
 		'search_contents'+SearchItemCount).innerHTML = '<div id="search_item'+SearchItemCount+'">' +
-			document.getElementById('hidden_search_inputgrade').innerHTML.replace('div_id="_id_"','id="item'+SearchItemCount+'"').replace('_id_','item'+SearchItemCount) +
+			byId('hidden_search_inputgrade').innerHTML.replace('div_id="_id_"','id="item'+SearchItemCount+'"').replace('_id_','item'+SearchItemCount) +
 			'</div>';
 }
 
@@ -256,15 +261,15 @@ function removeSearchItem( id )
 {
 	id = id.substr(4);
 	if ( id == 2 )
-		document.getElementById('search_contents'+id).innerHTML = '<a href="#" onclick="newSearchItem(); return false;"><img src="modules/Reports/assets/add_button.gif" /></a>';
+		byId('search_contents'+id).innerHTML = '<a href="#" onclick="newSearchItem(); return false;"><img src="modules/Reports/assets/add_button.gif" /></a>';
 	else
-		document.getElementById('search_contents'+id).innerHTML = '';
+		byId('search_contents'+id).innerHTML = '';
 }
 
 /*function newNoItem()
 {
 	SearchItemCount++;
-	document.getElementById('search_contents'+SearchItemCount).innerHTML = '<div id="search_item'+SearchItemCount+'">' + document.getElementById('hidden_search_inputtestno').innerHTML.replace('div_id="_id_"','id=item'+SearchItemCount).replace('_id_','item'+SearchItemCount).replace('test_no[]','test_no['+SearchItemCount+']') + '</DIV>';
+	byId('search_contents'+SearchItemCount).innerHTML = '<div id="search_item'+SearchItemCount+'">' + byId('hidden_search_inputtestno').innerHTML.replace('div_id="_id_"','id=item'+SearchItemCount).replace('_id_','item'+SearchItemCount).replace('test_no[]','test_no['+SearchItemCount+']') + '</DIV>';
 }*/
 
 function switchSearchInput( select )
@@ -272,8 +277,8 @@ function switchSearchInput( select )
 	id = select.id.substr(4);
 	value = select.options[select.selectedIndex].value;
 	se = select.selectedIndex;
-	document.getElementById('search_item'+id).innerHTML = document.getElementById('hidden_search_input'+value).innerHTML.replace('div_id="_id_"','id=item'+id);
-	document.getElementById('item'+id).selectedIndex = se;
+	byId('search_item'+id).innerHTML = byId('hidden_search_input'+value).innerHTML.replace('div_id="_id_"','id=item'+id);
+	byId('item'+id).selectedIndex = se;
 }
 
 function runQuery()
@@ -289,7 +294,7 @@ function runQuery()
 			if ( existing_elems[elemindex].name.substr(0,existing_elems[elemindex].name.indexOf(']')) == 'screen['+SearchScreenCount)
 				document.forms['main_form'].elements[elemindex].value='';
 		}
-		document.forms['main_form'].elements['breakdown'].value = document.getElementById('breakdown').options[document.getElementById('breakdown').selectedIndex].value;
+		document.forms['main_form'].elements['breakdown'].value = byId('breakdown').options[byId('breakdown').selectedIndex].value;
 
 		for(elemindex = 0;elemindex<elems.length;elemindex++)
 		{
@@ -297,16 +302,16 @@ function runQuery()
 			if ( elem.name != 'itemname' )
 			{
 				if ( elem.options )
-					document.getElementById('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+ SearchScreenCount +']['+elem.getAttribute('name')+']" value="'+elem.options[elem.selectedIndex].value+'" />';
+					byId('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+ SearchScreenCount +']['+elem.getAttribute('name')+']" value="'+elem.options[elem.selectedIndex].value+'" />';
 				else if ( elem.value )
-					document.getElementById('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+ SearchScreenCount +']['+elem.getAttribute('name')+']" value="'+elem.value+'" />';
-					
-			console.log(document.getElementById('hidden_permanent_search_contents').innerHTML);}
+					byId('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+ SearchScreenCount +']['+elem.getAttribute('name')+']" value="'+elem.value+'" />';
+
+			console.log(byId('hidden_permanent_search_contents').innerHTML);}
 		}
 	}
 
-	document.forms.main_form.query.value = document.getElementById('equation_div').innerHTML;
-	document.getElementById('search_screen').style.visibility = 'hidden';
+	document.forms.main_form.query.value = byId('equation_div').innerHTML;
+	byId('search_screen').style.visibility = 'hidden';
 	SendXMLRequest('main_form','XMLHttpRequest');
 }
 
@@ -323,16 +328,16 @@ function saveQuery()
 			if ( existing_elems[elemindex].name.substr(0,existing_elems[elemindex].name.indexOf(']')) == 'screen['+SearchScreenCount)
 				document.forms['main_form'].elements[elemindex].value='';
 		}
-		document.forms['main_form'].elements['breakdown'].value = document.getElementById('breakdown').options[document.getElementById('breakdown').selectedIndex].value;
+		document.forms['main_form'].elements['breakdown'].value = byId('breakdown').options[byId('breakdown').selectedIndex].value;
 		for(elemindex = 0;elemindex<elems.length;elemindex++)
 		{
 			elem = document.forms[formname].elements[elemindex];
 			if (elem.name!='itemname')
 			{
 				if (elem.options)
-					document.getElementById('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+ SearchScreenCount +']['+elem.getAttribute('name')+']" value="'+elem.options[elem.selectedIndex].value+'" />';
+					byId('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+ SearchScreenCount +']['+elem.getAttribute('name')+']" value="'+elem.options[elem.selectedIndex].value+'" />';
 				else if (elem.value)
-					document.getElementById('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+ SearchScreenCount +']['+elem.getAttribute('name')+']" value="'+elem.value+'" />';
+					byId('hidden_permanent_search_contents').innerHTML += '<input type="hidden" name="screen['+ SearchScreenCount +']['+elem.getAttribute('name')+']" value="'+elem.value+'" />';
 			}
 		}
 		SearchScreenCount++;
@@ -341,14 +346,14 @@ function saveQuery()
 	// Reset:
 	SearchScreenCount = 0;
 
-	document.forms.main_form.query.value = document.getElementById('equation_div').innerHTML.replace("+",'%2B');
-	document.getElementById('equation_div').innerHTML = '';
-	document.getElementById('search_screen').style.visibility = 'hidden';
-	document.getElementById('save_screen').style.visibility = 'hidden';
+	document.forms.main_form.query.value = byId('equation_div').innerHTML.replace("+",'%2B');
+	byId('equation_div').innerHTML = '';
+	byId('search_screen').style.visibility = 'hidden';
+	byId('save_screen').style.visibility = 'hidden';
 	SendXMLRequest('main_form','saveXMLHttpRequest');
 
-	document.getElementById('hidden_permanent_search_contents').innerHTML = '';
-	document.getElementById('equation_div').innerHTML = '';
+	byId('hidden_permanent_search_contents').innerHTML = '';
+	byId('equation_div').innerHTML = '';
 }
 
 function replaceAll( Source, stringToFind, stringToReplace ) {
