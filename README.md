@@ -5,7 +5,7 @@ Reports Module
 
 http://github.com/francoisjacquet/Reports
 
-Version 1.4 - October, 2016
+Version 1.5 - December, 2016
 
 License GNU GPL v2
 
@@ -33,4 +33,4 @@ Copy the `Reports/` folder (if named `Reports-master`, rename it) and its conten
 
 Go to _School Setup > School Configuration > Modules_ and click "Activate".
 
-Requires RosarioSIS 2.8.25+
+Requires RosarioSIS 2.9.12+

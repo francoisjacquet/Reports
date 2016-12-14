@@ -101,7 +101,7 @@ if ( isset( $_REQUEST['profiles'] )
 					values('" . $profile_id . "','" . $modname . "')" );
 			}
 
-			if ( ! isset( $_REQUEST['profiles'][ $report_id ][ $profile_id ] ) )
+			if ( ! $_REQUEST['profiles'][ $report_id ][ $profile_id ] )
 			{
 				DBQuery( "UPDATE PROFILE_EXCEPTIONS
 					SET CAN_USE='N',CAN_EDIT='N'
