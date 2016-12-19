@@ -27,7 +27,7 @@ function ReportsBottomButtons()
 	?>
 	<a href="Modules.php?modname=Reports/SavedReports.php&amp;modfunc=new" class="BottomButton">
 		<img src="assets/themes/<?php echo Preferences( 'THEME' ); ?>/btn/download.png" />
-		<span><?php echo _( 'Save Report' ); ?></span>
+		<span><?php echo dgettext( 'Reports', 'Save Report' ); ?></span>
 	</a>
 	<?php
 
