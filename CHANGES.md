@@ -1,6 +1,13 @@
 # CHANGES
 ## Reports module for RosarioSIS
 
+Changes in 1.6
+--------------
+- Correctly parse multi-language field Title in Calculations.php
+- Update English help: "a filter cannot be repeated for the same function" in Help_en.php
+- Remove add button when clicked in functions.js
+- Correctly localize "Save Report" in functions.php
+
 Changes in 1.5
 --------------
 - Fix checkboxes to be compatible with RosarioSIS 2.9.12+
