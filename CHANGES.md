@@ -1,6 +1,10 @@
 # CHANGES
 ## Reports module for RosarioSIS
 
+Changes in 1.5
+--------------
+- Fix checkboxes to be compatible with RosarioSIS 2.9.12+
+
 Changes in 1.4
 --------------
 - SQL fix: use ISO date format for timespan in ReportsCalculations.fnc.php
