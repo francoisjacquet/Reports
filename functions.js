@@ -251,17 +251,20 @@ function getXPos( id )
 function newSearchItem()
 {
 	SearchItemCount++;
-	byId(
-		'search_contents'+SearchItemCount).innerHTML = '<div id="search_item'+SearchItemCount+'">' +
-			byId('hidden_search_inputgrade').innerHTML.replace('div_id="_id_"','id="item'+SearchItemCount+'"').replace('_id_','item'+SearchItemCount) +
-			'</div>';
+
+	var searchItemHTML = byId('hidden_search_inputgrade').innerHTML
+			.replace('div_id="_id_"','id="item'+SearchItemCount+'"')
+			.replace('_id_','item'+SearchItemCount);
+
+	byId('search_contents'+SearchItemCount).innerHTML = '<div id="search_item'+SearchItemCount+'">' +
+		searchItemHTML + '</div>';
 }
 
 function removeSearchItem( id )
 {
 	id = id.substr(4);
-	if ( id == 2 )
-		byId('search_contents'+id).innerHTML = '<a href="#" onclick="newSearchItem(); return false;"><img src="modules/Reports/assets/add_button.gif" /></a>';
+	if ( id == 1 )
+		byId('search_contents'+id).innerHTML = '<a href="#" onclick="newSearchItem(); this.remove(); return false;"><img src="modules/Reports/assets/add_button.gif" /></a>';
 	else
 		byId('search_contents'+id).innerHTML = '';
 }
