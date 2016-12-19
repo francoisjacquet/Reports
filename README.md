@@ -17,7 +17,7 @@ Sponsored by Roman Meier
 
 DESCRIPTION
 -----------
-Generate Reports for your School. Generate and save Reports: perform calculations using your students and their data as variables, get breakdowns. Useful for State reporting.
+Generate Reports for your School. Generate and save reports: perform calculations using your students and their data as variables, get student breakdowns. Useful for State reporting.
 
 CONTENT
 -------
