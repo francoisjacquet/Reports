@@ -500,7 +500,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 
 	foreach ( (array) $search_fields_RET as $field )
 	{
-		$fields_select .= '<option value="' . $field['COLUMN_NAME'] . '">' . $field['TITLE'] . '</option>';
+		$fields_select .= '<option value="' . $field['COLUMN_NAME'] . '">' . ParseMLField( $field['TITLE'] ) . '</option>';
 	}
 
 	$fields_select .= '<option value="grade" selected>'. _( 'Grade Level' ) . '</option>';
