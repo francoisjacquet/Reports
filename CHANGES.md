@@ -4,9 +4,10 @@
 Changes in 1.6
 --------------
 - Correctly parse multi-language field Title in Calculations.php
-- Update English help: "a filter cannot be repeated for the same function" in Help_en.php
+- Update English help in Help_en.php
 - Remove add button when clicked in functions.js
 - Correctly localize "Save Report" in functions.php
+- Add Spanish & French translations + Help
 
 Changes in 1.5
 --------------

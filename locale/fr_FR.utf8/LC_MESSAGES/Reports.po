@@ -2,27 +2,27 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Reports module for RosarioSIS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-19 18:06-0500\n"
-"PO-Revision-Date: 2016-12-20 10:09-0500\n"
+"POT-Creation-Date: 2016-12-19 17:52-0500\n"
+"PO-Revision-Date: 2016-12-20 10:12-0500\n"
 "Last-Translator: François Jacquet <info@rosariosis.org>\n"
 "Language-Team: RosarioSIS <info@rosariosis.org>\n"
-"Language: es_ES\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: dgettext:2\n"
 "X-Poedit-Basepath: /var/www/github/rosariosis/modules/Reports/\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.7.6\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: Calculations.php:90
 msgid "Saved Equation"
-msgstr "Ecuación Guardada"
+msgstr "Équations Sauvegardée"
 
 #: Calculations.php:134
 msgid "Time Values"
-msgstr "Valores de Tiempo"
+msgstr "Valeurs de Temps"
 
 #: Calculations.php:135 Calculations.php:332
 msgid "Fields"
@@ -48,15 +48,15 @@ msgstr ""
 #: includes/ReportsCalculations.fnc.php:28
 #: includes/ReportsCalculations.fnc.php:1259
 msgid "Student ID"
-msgstr "ID Estudiante"
+msgstr "ID Élève"
 
 #: Calculations.php:214 Calculations.php:246
 msgid "Functions"
-msgstr "Funciones"
+msgstr "Fonctions"
 
 #: Calculations.php:227 Calculations.php:246
 msgid "Operators"
-msgstr "Operadores"
+msgstr "Opérateurs"
 
 #: Calculations.php:351 CalculationsReports.php:243
 #: includes/ReportsCalculations.fnc.php:410
@@ -76,19 +76,19 @@ msgstr ""
 
 #: Calculations.php:372 CalculationsReports.php:264
 msgid "Breakdown"
-msgstr "Análisis"
+msgstr "Répartition"
 
 #: Calculations.php:375 Calculations.php:446
 msgid "Equation"
-msgstr "Ecuación"
+msgstr "Équation"
 
 #: Calculations.php:380
 msgid "Back"
-msgstr "Regresar"
+msgstr "Retour"
 
 #: Calculations.php:383 SavedReports.php:235
 msgid "Run"
-msgstr "Correr"
+msgstr "Lancer"
 
 #: Calculations.php:386 Calculations.php:430 Calculations.php:454
 #: SavedReports.php:189 SavedReports.php:193
@@ -121,47 +121,47 @@ msgstr ""
 
 #: Calculations.php:558
 msgid "Please choose a field."
-msgstr "Por favor escoja un campo."
+msgstr "Choisissez un champ s'il vous plaît."
 
 #: Calculations.php:561
 msgid "A function cannot be placed here; choose a field instead."
-msgstr "Una función no se puede colocar acá; escoja un campo en lugar de eso."
+msgstr "Une fonction ne peut-être placée ici; choisissez un champ à la place."
 
 #: Calculations.php:564
 msgid "A function cannot be placed here; choose an operator instead."
-msgstr "Una función no se puede colocar acá; escoja un operador en lugar de eso."
+msgstr "Une fonction ne peut-être placée ici; choisissez un opérateur à la place."
 
 #: Calculations.php:567
 msgid "Please choose an operator or another constant."
-msgstr "Por favor escoja un operador o otra constante."
+msgstr "Choisissez un opérateur ou une autre constante s'il vous plaît."
 
 #: Calculations.php:570
 msgid "Please choose an operator."
-msgstr "Por favor escoja un operador."
+msgstr "Choisissez un opérateur s'il vous plaît."
 
 #: Calculations.php:573
 msgid "A field cannot be placed here; choose a function instead."
-msgstr "Un campo no se puede colocar acá; escoja una función en lugar de eso."
+msgstr "Un champ ne peut-être placé ici; choisissez une fonction à la place."
 
 #: Calculations.php:576
 msgid "A field cannot be placed here; choose an operator instead."
-msgstr "Un campo no se puede colocar acá; escoja un operador en lugar de eso."
+msgstr "Un champ ne peut-être placé ici; choisissez un opérateur à la place."
 
 #: Calculations.php:579 Calculations.php:591
 msgid "An operator cannot be placed here; choose a field instead."
-msgstr "Un operador no se puede colocar acá; escoja un campo en lugar de eso."
+msgstr "Un opérateur ne peut-être placé ici; choisissez un champ à la place."
 
 #: Calculations.php:582
 msgid "An operator cannot be placed here; choose a function instead."
-msgstr "Un operador no se puede colocar acá; escoja una función en lugar de eso."
+msgstr "Un opérateur ne peut-être placé ici; choisissez une fonction à la place."
 
 #: Calculations.php:585
 msgid "Please choose a function."
-msgstr "Por favor escoja una función."
+msgstr "Choisissez une fonction s'il vous plaît."
 
 #: Calculations.php:588
 msgid "Please choose an operator or press save to finish."
-msgstr "Por favor escoja un operador o presione guardar para terminar."
+msgstr "Choisissez un opérateur s'il vous plaît ou cliquez sur enregistrer pour terminer."
 
 #: CalculationsReports.php:14 CalculationsReports.php:272
 msgid "Go"
@@ -169,7 +169,7 @@ msgstr ""
 
 #: CalculationsReports.php:228
 msgid "Calculation"
-msgstr "Cálculo"
+msgstr "Calcul"
 
 #: CalculationsReports.php:245 includes/ReportsCalculations.fnc.php:422
 #, php-format
@@ -178,43 +178,43 @@ msgstr ""
 
 #: CalculationsReports.php:268
 msgid "Graph Results"
-msgstr "Gráfico de los Resultados"
+msgstr "Graphique des Résultats"
 
 #: CalculationsReports.php:277
 msgid "Add Column"
-msgstr "Agregar Columna"
+msgstr "Ajouter Colonne"
 
 #: CalculationsReports.php:280
 msgid "Add Row"
-msgstr "Agregar Línea"
+msgstr "Ajouter Ligne"
 
 #: Menu.php:12
 msgid "Calculations"
-msgstr "Cálculos"
+msgstr "Calculs"
 
 #: Menu.php:13
 msgid "Calculations Reports"
-msgstr "Reportes de Cálculos"
+msgstr "Rapports des Calculs"
 
 #: Menu.php:14
 msgid "Setup"
-msgstr "Configuración"
+msgstr "Configuration"
 
 #: Menu.php:15
 msgid "Saved Reports"
-msgstr "Reportes Guardados"
+msgstr "Rapports Sauvegardés"
 
 #: SavedReports.php:27 SavedReports.php:222
 msgid "Untitled"
-msgstr "Sans titre"
+msgstr "Sin título"
 
 #: SavedReports.php:143
 msgid "Saved Report"
-msgstr "Reporte Guardado"
+msgstr "Rapport Sauvegardé"
 
 #: SavedReports.php:178
-msgid "Program Title"
-msgstr ""
+msgid "Program"
+msgstr "Programme"
 
 #: SavedReports.php:302
 msgid "Profiles"
@@ -222,12 +222,12 @@ msgstr ""
 
 #: functions.php:30
 msgid "Save Report"
-msgstr "Guardar Reporte"
+msgstr "Sauvegarder Rapport"
 
 #: includes/ReportsCalculations.fnc.php:244
 #, php-format
 msgid "%s years"
-msgstr "%s años"
+msgstr "%s années"
 
 #: includes/ReportsCalculations.fnc.php:268
 #: includes/ReportsCalculations.fnc.php:554
@@ -257,9 +257,6 @@ msgstr ""
 #: includes/ReportsCalculations.fnc.php:1271
 msgid "First Name starts with"
 msgstr ""
-
-#~ msgid "Program"
-#~ msgstr "Programa"
 
 #~ msgid "# of Students"
 #~ msgstr "# de Estudiantes"
