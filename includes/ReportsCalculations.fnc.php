@@ -411,7 +411,7 @@ function _getAJAXResults( $query, $modfunc )
 			}
 			elseif ( $_REQUEST['breakdown'] === 'grade' )
 			{
-				$cat_column = _( 'Grade' );
+				$cat_column = _( 'Grade Level' );
 			}
 			elseif ( $_REQUEST['breakdown'] === 'age' )
 			{

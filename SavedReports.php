@@ -24,7 +24,7 @@ if ( $_REQUEST['modfunc'] === 'new'
 	DBQuery( "INSERT INTO SAVED_REPORTS (ID,TITLE,STAFF_ID,PHP_SELF,SEARCH_PHP_SELF,SEARCH_VARS)
 		values(
 			'" . $report_id . "',
-			'" . DBEscapeString( _( 'Untitled' ) ) . "',
+			'" . DBEscapeString( dgettext( 'Reports', 'Untitled' ) ) . "',
 			'" . User( 'STAFF_ID' ) . "',
 			'" . PreparePHP_SELF( $_SESSION['_REQUEST_vars'] ) . "',
 			'" . $_SESSION['Search_PHP_SELF'] . "',
@@ -175,7 +175,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 
 	$columns = array(
 		'TITLE' => _( 'Title' ),
-		'PHP_SELF' => _( 'Program' ),
+		'PHP_SELF' => _( 'Program Title' ),
 		// FJ disable Publishing options.
 		//'PUBLISHING' => _('Publishing Options' ),
 	);
@@ -219,7 +219,7 @@ function _makeTextInput( $value, $column )
 	else
 		$id = 'new';
 
-	if ( $value === _( 'Untitled' ) )
+	if ( $value === dgettext( 'Reports', 'Untitled' ) )
 	{
 		$div = false;
 	}
