@@ -5,7 +5,7 @@ Reports Module
 
 http://github.com/francoisjacquet/Reports
 
-Version 1.5 - December, 2016
+Version 1.6 - December, 2016
 
 License GNU GPL v2
 
