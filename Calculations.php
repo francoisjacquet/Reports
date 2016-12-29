@@ -153,11 +153,11 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 		'operator' => array( '+', '-', '*', '/', '(', ')' ),
 		'field' => array(
 			'~',
-			_( 'Present' ),
-			_( 'Absent' ),
-			_( 'Enrolled' ),
+			'Present',
+			'Absent',
+			'Enrolled',
 			'~',
-			dgettext( 'Reports', 'Student ID' ),
+			'Student ID',
 		),
 	);
 
@@ -310,7 +310,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 					) . '</td><td class="center">' .
 					DrawTab(
 						'0',
-						'#" onclick="insertItem(\'0\',\''.$type.'\'); return false;'
+						'#" onclick="insertItem(\'0\',\'' . $type . '\'); return false;'
 					) . '</td><td></td></tr>';
 
 				$content .= '</table>';
@@ -323,7 +323,7 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 
 		$content .= DrawTab(
 			$item,
-			'#" onclick="insertItem(\'' . $item.'\',\'' . $type . '\'); return false;'
+			'#" onclick="insertItem(\'' . $item . '\',\'' . $type . '\'); return false;'
 		);
 	}
 
