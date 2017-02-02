@@ -19,6 +19,7 @@ DESCRIPTION
 -----------
 Generate Reports for your School. Generate and save reports: perform calculations using your students and their data as variables, get student breakdowns. Useful for State reporting.
 
+Includes Help.
 Translated in [French](https://www.rosariosis.org/fr/reports-module/) & [Spanish](https://www.rosariosis.org/es/reports-module/).
 
 
