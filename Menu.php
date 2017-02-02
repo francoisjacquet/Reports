@@ -8,6 +8,7 @@
  */
 
 $menu['Reports']['admin'] = array(
+	'title' => _( 'Reports' ),
 	'default' => 'Reports/Calculations.php', // Program loaded by default when menu opened.
 	'Reports/Calculations.php' => dgettext( 'Reports', 'Calculations' ),
 	'Reports/CalculationsReports.php' => dgettext( 'Reports', 'Calculations Reports' ),
