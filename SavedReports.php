@@ -55,7 +55,16 @@ if ( isset( $_REQUEST['values'] )
 
 		foreach ( (array)$columns as $column => $value )
 		{
-			$sql .= $column . "='" . $value . "',";
+			if ( function_exists( 'DBEscapeIdentifier' ) ) // RosarioSIS 3.0+.
+			{
+				$escaped_column = DBEscapeIdentifier( $column );
+			}
+			else
+			{
+				$escaped_column = '"' . mb_strtolower( $column ) . '"';
+			}
+
+			$sql .= $escaped_column . "='" . $value . "',";
 		}
 
 		$sql = mb_substr( $sql, 0, -1 ) . " WHERE ID='" . $id . "'";

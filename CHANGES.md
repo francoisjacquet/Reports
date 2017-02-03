@@ -1,6 +1,10 @@
 # CHANGES
 ## Reports module for RosarioSIS
 
+Changes in 1.7
+--------------
+- Escape SQL identifiers in Calculations.php & SavedReports.php
+
 Changes in 1.6
 --------------
 - Correctly parse multi-language field Title in Calculations.php
