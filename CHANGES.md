@@ -1,6 +1,10 @@
 # CHANGES
 ## Reports module for RosarioSIS
 
+Changes in 1.8
+--------------
+- SQL error fix on install: check if exists before INSERT in install.sql
+
 Changes in 1.7
 --------------
 - Escape SQL identifiers in Calculations.php & SavedReports.php
