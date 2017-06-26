@@ -217,6 +217,17 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 	//$items['field'] += array('~','IL Time','~','0','1','2','3','4','5','6','7','8','9')
 	echo '<br />';
 
+	// CSS.
+	echo '<style>.reports-calculation-item{
+		display: block;
+		font-weight: bold;
+		margin: 5px;
+		padding: 5px 7px;
+		border: 1px solid #333;
+		background: #fff;
+		border-radius: 3px;
+	}</style>';
+
 	echo '<table class="width-100p"><tr class="st"><td class="valign-top">';
 
 	$content = '<table class="width-100p"><tr><td class="center valign-top"><b>' .
@@ -224,15 +235,21 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 
 	$type = 'function';
 
+	$function_i = 0;
+
 	foreach ( (array) $items['function'] as $item )
 	{
-		$content .= DrawTab(
-			$item,
-			'#" onclick="insertItem(\'' . $item . '\',\'' . $type . '\'); return false;'
-		);
+		$content .= '<a href="#" class="reports-calculation-item"
+			onclick="insertItem(\'' . $item . '\',\'' . $type . '\'); return false;">' .
+			$item . '</a>';
+
+		if ( ++$function_i === 5 )
+		{
+			$content .= '</td><td class="center valign-top"><br />';
+		}
 	}
 
-	$content .= '</td><td class="center valign-top" style="border-left: solid 1px #000;"><b>' .
+	$content .= '</td><td class="center valign-top" style="border-left: solid 1px #000;"><b>&nbsp;' .
 		dgettext( 'Reports', 'Operators' ) . '</b><br />';
 
 	$type = 'operator';
@@ -241,10 +258,9 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 
 	foreach ( (array) $items['operator'] as $item )
 	{
-		$content .= DrawTab(
-			$item,
-			'#" onclick="insertItem(\''.$item.'\',\''.$type.'\'); return false;'
-		);
+		$content .= '<a href="#" class="reports-calculation-item"
+			onclick="insertItem(\'' . $item . '\',\'' . $type . '\'); return false;">' .
+			$item . '</a>';
 
 		$j++;
 
@@ -252,7 +268,10 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 
 	$content .= '</td></tr></table>';
 
-	echo PopTable( 'header', dgettext( 'Reports', 'Functions' ) . ' &amp; ' . dgettext( 'Reports', 'Operators' ) );
+	echo PopTable(
+		'header',
+		dgettext( 'Reports', 'Functions' ) . ' &amp; ' . dgettext( 'Reports', 'Operators' )
+	);
 
 	echo $content;
 
@@ -283,44 +302,41 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 
 				for ( $i = 7; $i <= 9; $i++ )
 				{
-					$content .= '<td style="width:15px;" class="center">' .
-						DrawTab(
-							$i,
-							'#" onclick="insertItem(\'' . $i . '\',\'' .$type . '\'); return false;'
-						) . '</td>';
+					$content .= '<td style="width:18px;" class="center">' .
+						'<a href="#" class="reports-calculation-item"
+						onclick="insertItem(\'' . $i . '\',\'' . $type . '\'); return false;">' .
+						$i . '</a></td>';
 				}
 
 				$content .= '</tr><tr>';
 
 				for ( $i = 4; $i <= 6; $i++ )
 				{
-					$content .= '<td style="width:15px;" class="center">' .
-						DrawTab(
-							$i,
-							'#" onclick="insertItem(\''.$i.'\',\''.$type.'\'); return false;'
-						) . '</td>';
+					$content .= '<td style="width:18px;" class="center">' .
+						'<a href="#" class="reports-calculation-item"
+						onclick="insertItem(\'' . $i . '\',\'' . $type . '\'); return false;">' .
+						$i . '</a></td>';
 				}
 
 				$content .= '</tr><tr>';
 
 				for ( $i = 1; $i <= 3; $i++ )
 				{
-					$content .= '<td style="width:15px;" class="center">' .
-						DrawTab(
-							$i,
-							'#" onclick="insertItem(\'' . $i . '\',\'' . $type . '\'); return false;'
-						) . '</td>';
+					$content .= '<td style="width:18px;" class="center">' .
+						'<a href="#" class="reports-calculation-item"
+						onclick="insertItem(\'' . $i . '\',\'' . $type . '\'); return false;">' .
+						$i . '</a></td>';
 				}
 
 				$content .= '</tr><tr><td class="center">' .
-					DrawTab(
-						'.',
-						'#" onclick="insertItem(\'.\',\'' . $type . '\'); return false;'
-					) . '</td><td class="center">' .
-					DrawTab(
-						'0',
-						'#" onclick="insertItem(\'0\',\'' . $type . '\'); return false;'
-					) . '</td><td></td></tr>';
+					'<a href="#" class="reports-calculation-item"
+						onclick="insertItem(\'.\',\'' . $type . '\'); return false;">' .
+						'.' . '</a>' .
+					'</td><td class="center">' .
+					'<a href="#" class="reports-calculation-item"
+						onclick="insertItem(\'0\',\'' . $type . '\'); return false;">' .
+						'0' . '</a>' .
+					'</td><td></td></tr>';
 
 				$content .= '</table>';
 
@@ -330,10 +346,9 @@ if ( $_REQUEST['modfunc'] !== 'remove' )
 				continue;
 		}
 
-		$content .= DrawTab(
-			$item,
-			'#" onclick="insertItem(\'' . $item . '\',\'' . $type . '\'); return false;'
-		);
+		$content .= '<a href="#" class="reports-calculation-item"
+			onclick="insertItem(\'' . $item . '\',\'' . $type . '\'); return false;">' .
+			$item . '</a>';
 	}
 
 	$content .= '</td></tr></table>';

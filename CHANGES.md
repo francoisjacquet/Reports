@@ -1,6 +1,10 @@
 # CHANGES
 ## Reports module for RosarioSIS
 
+Changes in 1.9
+--------------
+- CSS style Calculations items as buttons in Calculations.php
+
 Changes in 1.8
 --------------
 - SQL error fix on install: check if exists before INSERT in install.sql
