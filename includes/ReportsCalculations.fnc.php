@@ -66,6 +66,9 @@ function _makeQuery( $query )
 
 	$query = str_replace( 'max', '_max', $query );
 
+	// Fix PHP error empty count().
+	$query = str_replace( 'count(  )', 'count( array() )', $query );
+
 	$query = preg_replace(
 		"/([a-z_]+)\([ ]*\<[a-z]+([0-9]+)\>([a-z: ]+)\<[a-z0-9]+\>[ ]*\)/",
 		"\\1(_getResults('\\3','\\2'))",
@@ -93,9 +96,9 @@ function _makeQuery( $query )
 
 	/*print_r( $_REQUEST );
 	echo '<br />EVAL QUERY: ';
+	echo '<pre>' . str_replace( '<', '&lt;', str_replace( '>', '&gt;', $query ) ).'</pre>';
 	echo '<br />RESULTS: ' . $result;
-	echo '<br />AVG PRES: ' . _average( _getResults( 'present', '2' ) );
-	echo '<pre>' . str_replace( '<', '&lt;', str_replace( '>', '&gt;', $query ) ).'</pre>';*/
+	echo '<br />AVG PRES: ' . _average( _getResults( 'present', '2' ) );*/
 
 	return $query;
 }
@@ -1346,11 +1349,11 @@ function _makeScreens( $equation )
  *
  * Local function
  *
- * @param  array $array Array of numbers
+ * @param  array $array Array of numbers. Defaults to null.
  *
  * @return float Average
  */
-function _average( $array )
+function _average( $array = null )
 {
 	$i = 0;
 
@@ -1375,12 +1378,17 @@ function _average( $array )
  *
  * Local function
  *
- * @param  array $array Array of numbers
+ * @param  array $array Array of numbers. Defaults to null.
  *
  * @return float Sum
  */
-function _sum( $array )
+function _sum( $array = null )
 {
+	if ( ! $array )
+	{
+		return 0;
+	}
+
 	$sum = 0;
 
 	foreach ( (array) $array as $elem )
@@ -1397,12 +1405,17 @@ function _sum( $array )
  *
  * Local function
  *
- * @param  array $array Array of numbers
+ * @param  array $array Array of numbers. Defaults to null.
  *
  * @return float Minimum
  */
-function _min( $array )
+function _min( $array = null )
 {
+	if ( ! $array )
+	{
+		return 0;
+	}
+
 	$min = $array[0];
 
 	foreach ( (array) $array as $elem )
@@ -1422,12 +1435,17 @@ function _min( $array )
  *
  * Local function
  *
- * @param  array $array Array of numbers
+ * @param  array $array Array of numbers. Defaults to null.
  *
  * @return float Maximum
  */
-function _max( $array )
+function _max( $array = null )
 {
+	if ( ! $array )
+	{
+		return 0;
+	}
+
 	$max = $array[0];
 
 	foreach ( (array) $array as $elem )
@@ -1449,15 +1467,20 @@ function _max( $array )
  *
  * @uses _sum()
  *
- * @param  array $array Array of Student IDs containing numbers
+ * @param  array $array Array of Student IDs containing numbers. Defaults to null.
  *
  * @return float Sum min
  */
-function _su0( $arr )
+function _su0( $arr = null )
 {
 	/*print_r( $arr );
 
 	echo "\n\n";*/
+
+	if ( ! $array )
+	{
+		return 0;
+	}
 
 	foreach ( (array) $arr as $student_id => $array )
 	{
@@ -1485,17 +1508,22 @@ function _su0( $arr )
  *
  * @uses _sum()
  *
- * @param  array $array Array of Student IDs containing numbers
+ * @param  array $array Array of Student IDs containing numbers. Defaults to null.
  *
  * @return float Sum max
  */
-function _su1( $arr )
+function _su1( $arr = null )
 {
 	/*print_r( $arr );
 
 	echo "\n\n";*/
 
-	foreach ( (array)$arr as $student_id => $array )
+	if ( ! $array )
+	{
+		return 0;
+	}
+
+	foreach ( (array) $arr as $student_id => $array )
 	{
 		$max = is_array( $array ) ? $array[ key( $array ) ] : $array;
 
@@ -1521,15 +1549,20 @@ function _su1( $arr )
  *
  * @uses _average()
  *
- * @param  array $array Array of Student IDs containing numbers
+ * @param  array $array Array of Student IDs containing numbers. Defaults to null.
  *
  * @return float Average min
  */
-function _avg0( $arr )
+function _avg0( $arr = null )
 {
 	/*print_r( $arr );
 
 	echo "\n\n";*/
+
+	if ( ! $array )
+	{
+		return 0;
+	}
 
 	foreach ( (array) $arr as $student_id => $array )
 	{
@@ -1557,15 +1590,20 @@ function _avg0( $arr )
  *
  * @uses _average()
  *
- * @param  array $array Array of Student IDs containing numbers
+ * @param  array $array Array of Student IDs containing numbers. Defaults to null.
  *
  * @return float Average max
  */
-function _avg1( $arr )
+function _avg1( $arr = null )
 {
 	/*print_r( $arr );
 
 	echo "\n\n";*/
+
+	if ( ! $array )
+	{
+		return 0;
+	}
 
 	foreach ( (array) $arr as $student_id => $array )
 	{

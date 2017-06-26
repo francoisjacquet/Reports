@@ -4,6 +4,7 @@
 Changes in 1.9
 --------------
 - CSS style Calculations items as buttons in Calculations.php
+- Fix PHP error empty sum(), average(), count(), max(), min() & other functions in ReportCalculations.fnc.php
 
 Changes in 1.8
 --------------
