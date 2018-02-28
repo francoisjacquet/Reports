@@ -71,7 +71,7 @@ CREATE OR REPLACE FUNCTION create_table_saved_calculations() RETURNS void AS
 $func$
 BEGIN
     IF EXISTS (SELECT 1 FROM pg_catalog.pg_tables
-        WHERE schemaname=CURRENT_SCHEMA
+        WHERE schemaname=CURRENT_SCHEMA()
         AND tablename='saved_calculations') THEN
     RAISE NOTICE 'Table "saved_calculations" already exists.';
     ELSE
@@ -118,7 +118,7 @@ CREATE OR REPLACE FUNCTION create_table_saved_reports() RETURNS void AS
 $func$
 BEGIN
     IF EXISTS (SELECT 1 FROM pg_catalog.pg_tables
-        WHERE schemaname=CURRENT_SCHEMA
+        WHERE schemaname=CURRENT_SCHEMA()
         AND tablename='saved_reports') THEN
     RAISE NOTICE 'Table "saved_reports" already exists.';
     ELSE
